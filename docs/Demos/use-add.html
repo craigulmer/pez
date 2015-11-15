@@ -1,0 +1,117 @@
+<TITLE>Using Pez:Add & Weight Functions</Title>
+<CENTER><H1>Using PEZ: Add & Weight Functions</H1>
+</CENTER>
+
+<HR>
+<H3>Add Overview</H3>
+<BLOCKQUOTE>
+The ADD pole/zero options are fairly simple. In general, you click on either
+the add pole or zero button, move the mouse over to the Z-plane, and then
+click the destination of where you want to place pole or zero. If you change
+your mind and decide that you do not want to add a pole or zero, simply click
+the mouse outside of the Z-plane (but still in the main control window), and
+PEZ will take you out of the add mode. <BR>
+<BR>
+When you are adding a pole or zero, PEZ uses the Weight value to determine how
+many poles or zeros are added to the Z-Plane. If you add poles or zeros on
+top of existing poles or zeros, PEZ does all of the nasty work of analyzing
+the situation and makes the right changes. For example, if you have a 
+current weight of 4, and add a pole on top of a location that already has 
+2 zeros, PEZ will remove the two zeros and replace them with 2 poles.<BR>
+<BR>
+Additionally, PEZ is configured to represent REAL systems. This means that
+if you have a pole or zero with an imaginary component, PEZ will automatically
+add the complex conjugate.  This results in a mirroring across the real
+(or X) axis. <BR>
+</BLOCKQUOTE>
+<BR>
+<HR>
+<BR>
+<IMAGE SRC="../Graphics/pez2.gif" ALIGN=RIGHT>
+<H2>The Different ADD Options:</H2>
+<BR>
+<BLOCKQUOTE>
+<H4>Add Single Weighted:</H4>
+<BLOCKQUOTE>
+This option allows you to add a single weighted pole or zero.
+The new addition is (as with all objects) mirrored across the real axis.
+</BLOCKQUOTE>
+<BR>
+</BLOCKQUOTE>
+
+<HR>
+<IMAGE SRC="../Graphics/pez4.gif" ALIGN=RIGHT>
+<BLOCKQUOTE>
+<H4>Add Multiple Weighted:</H4>
+<BLOCKQUOTE>
+This option allows you to add a several weighted poles or zeros.
+It is in effect the same as repeating the Add Single option several times
+until the user clicks outside the bounds of the Z-Axis.
+</BLOCKQUOTE>
+<BR>
+
+</BLOCKQUOTE>
+
+<HR>
+<IMAGE SRC="../Graphics/pez5.gif" ALIGN=RIGHT>
+<BLOCKQUOTE>
+<H4>Add Double:</H4>
+<BLOCKQUOTE>
+These options are built for adding poles and zeros with mirrors 
+about the unit circle. For example, clicking on a Add Double Pole, and 
+clicking close to the unit circle (on the inner side) can result in a plot
+such as:<BR>
+</BLOCKQUOTE>
+<BR>
+<CENTER>
+<IMAGE SRC="../Graphics/pez6a.gif">
+</CENTER>
+<BR>
+<HR>
+<BR>
+<BLOCKQUOTE>
+For the Double Add Pole/Zero Combo, An operation similar to an add double
+is performed, but this time a pole is placed inside the unit circle, and a 
+zero is mirrored outside of the unit circle. It does not matter whether you
+click inside or outside of the unit circle, PEZ will figure out where to
+place what for you, such as this Double Pole/Zero Combo Add:<BR>
+</BLOCKQUOTE>
+<BR>
+<CENTER>
+<IMAGE   SRC="../Graphics/pez6b.gif">
+</CENTER>
+<BR>
+<BR>
+
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+<HR>
+<H2>Changing The Weight:</H2>
+<IMAGE SRC="../Graphics/pez7.gif" ALIGN=RIGHT>
+<BLOCKQUOTE>
+For the Add and Delete options of PEZ, a Weight control box is added to allow
+easier manipulations of weighted poles or zeros.  Basically, whenever there
+is an Add or Delete operation, PEZ uses the Current Weight value to determine
+how many objects should be placed or removed from the current location.<BR>
+<BR>
+For example, if you wanted to insert a delay of 5 in the impulse response,
+you would want to add 5 poles at the origin of the Z-plane. Rather than
+adding the 5 poles by hand, you could change the current weight to 5, then add
+a single pole at the origin. A small number 5 will be placed next to your new
+pole to signify that there are 5 poles for the one pole marking in the 
+Z-Plane.<BR>
+<BR>
+PEZ maintains a list of how many of what are where, and maintains the list
+to reflect changes in the filter.
+
+<BR>
+</BLOCKQUOTE>
+<BR>
+<HR>
+<CENTER>
+<BR>
+Continue on to the Next Page of <A HREF="./use-move.html"> Move Options </A> <BR>
+<BR>
+Return to the Main <A HREF="./use.html"> PEZ Use </A> page<BR>
+<BR>

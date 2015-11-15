@@ -1,0 +1,93 @@
+<TITLE>Using PEZ: File Options And Other Stuff</Title>
+<CENTER><H1>Using PEZ: File Options and Other Stuff</H1>
+</CENTER>
+
+<HR>
+<H2>File Options</H2>
+<BLOCKQUOTE>
+PEZ supports a few different ways to save and load data relating to
+the filter you have designed. The file options are:<BR>
+
+<UL>
+<LI> Save data in a PEZ format 
+<LI> Load data stored in a PEZ format
+<LI> Export data as two Polynomial Vectors (One for Zeros, one for Poles)
+<LI> Export data as two Roots Vectors (One for Zeros, one for Poles)
+<LI> Print to Printer, Postscript, Enhanced Postscript, or Compuserve GIF file
+</UL>
+</BLOCKQUOTE>
+
+
+<H3>PEZ Data File Description</H3>
+<BR>
+<BLOCKQUOTE>
+The internal PEZ data files that PEZ uses to save and load data basically 
+hold all the variables that PEZ needs to reconstruct your filter simply.
+They are stored in one singular *.mat data file. This does not allow an
+easy way to import data into PEZ, and general imports of outside data will
+be included in the next release of PEZ.<BR>
+</BLOCKQUOTE>
+<BR>
+<H3>PEZ Export File Descriptions</H3>
+<BR>
+<BLOCKQUOTE>
+The export facilities provide an easy way to save your filter in a form
+that can be used in MATLAB. As with the internal PEZ data format, 
+the necessary vectors are saved to a single MATLAB file. To access the 
+vectors, load the mat file. For a Polynomial export there will be two
+vectors: pole_poly_list and zero_poly_list. These files should be in
+order for direct calls to functions such as freqz(). Similarly a
+Roots export will generate the roots of the filter with the names of
+pole_roots_list and zero_roots_list. The polynomial can be formed
+by calling the function poly().<BR>
+</BLOCKQUOTE>
+<BR>   
+
+<HR>
+<H3>Clearing the Z-Plane</H3>
+<BR>
+<BLOCKQUOTE>
+The main control window has a few menu options to clear all of the poles
+and/or zeros from the work area. These options will do deletions
+permanently, so make sure you pay attention to what you're doing with
+these options or you will lose your work!<BR>
+</BLOCKQUOTE>
+<BR>
+
+<HR>
+<H3>Quick-Sizing the Windows</H3>
+<BR>
+<BLOCKQUOTE>
+On both the Main Control Window and the Plots Window are options to allow
+for the quick resizing of the windows. Due to the large amount of screen
+space that PEZ can take up, there are a few options to quickly change the 
+size of PEZ's windows. While in the smaller modes text can become unreadable,
+the functionality of the windows are still in tact. Future versions
+of PEZ may reflect changes in OS dimensions.<BR>
+</BLOCKQUOTE>
+<BR>
+
+
+<HR>
+<IMAGE SRC="../Graphics/pez14.gif" ALIGN=RIGHT>
+<H2>Resizing the Z-Plane</H2> 
+<BLOCKQUOTE>
+Just below the Z-Plane in the Main Control Window is a gadget to
+zoom in and out of the Z-Plane. The value in this gadget determines
+what the magnitude of the Z-Plane Axis is.<BR>
+</BLOCKQUOTE>
+
+
+<BR>
+</BLOCKQUOTE>
+<BR>
+<HR>
+<CENTER>
+<BR>
+Continue on to the Next Page of <A HREF="./use-quest.html"> Points of Interest </A> <BR>
+<BR>
+Return to the Previous Page of <A HREF="./use-edit.html"> Edit Options </A> <BR>
+<BR>
+Return to the Main <A HREF="./use.html"> PEZ Use </A> page<BR>
+<BR>
+
