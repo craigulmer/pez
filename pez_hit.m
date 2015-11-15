@@ -1,7 +1,7 @@
-function place = pez_is_hit(x,y,x_array,y_array,precision)
+function place = pez_hit(x,y,x_array,y_array,precision)
 %
-%  pez_is_hit() :: Routine for seeing if an add was a hit. 
-%  for PeZ v2.8b last Rev Feb 25  -- No Modifications without author's consent
+%  pez_bin() :: Bulk of decode action routines. Zscale, Add Mirrors,etc
+%  for PeZ v3.0 last rev June 10,1996  -- No Modifications without author's consent
 %  (type 'pez' in MATLAB to run)
 %  Craig Ulmer / GRiMACE@ee.gatech.edu
 %
@@ -14,6 +14,8 @@ function place = pez_is_hit(x,y,x_array,y_array,precision)
 %   100 for the hundredths place.  The higher the precision, the more accurate
 %   the results have to be.
 %
+%   Used in the PEZ system
+
 
 x      =round(x*precision)/precision;
 y      =round(y*precision)/precision;

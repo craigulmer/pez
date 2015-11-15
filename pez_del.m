@@ -1,11 +1,11 @@
-function pez_del(del_place,is_a_pole)
+function pez_del(del_place,is_a_pole,weight)
 %
-%  pez_del(place_#,is_a_pole) :: Root routine for deleting pole or zero
-%  for PeZ v2.8b last Rev Feb 25  -- No Modifications without author's consent
+%  pez_del() :: For deleting poles/zeros
+%  for PeZ v3.0 last rev June 10,1996  -- No Modifications without author's consent
 %  (type 'pez' in MATLAB to run)
 %  Craig Ulmer / GRiMACE@ee.gatech.edu
 
-  global weight p_list z_list num_poles num_zeros num_diff_poles num_diff_zeros
+  global  p_list z_list num_poles num_zeros num_diff_poles num_diff_zeros
     
   if is_a_pole
     a_list  = p_list;

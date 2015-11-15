@@ -1,19 +1,12 @@
 function pez_config(action,config_file_name)
 %
-%  pez_config() :: Holds basic configuration. Not finished yet.
-%  for PeZ v2.8b last Rev Feb 25  -- No Modifications without author's consent
+%  pez_config() :: Configuration window and loader
+%  for PeZ v3.0 last rev June 10,1996  -- No Modifications without author's consent
 %  (type 'pez' in MATLAB to run)
 %  Craig Ulmer / GRiMACE@ee.gatech.edu
 
-% change here for whether or not to plot log magnitudes
-global pez_log;
-if ~(length(pez_log))
-   pez_log=0;  %0=not log mag plots, 1=log mag plots
-end;
-
-
-
-global mirror_x mirror_y precision fr_omega frs_omega w_main_win id_plot w_config plot_theta
+global mirror_x mirror_y pez_precision fr_omega frs_omega w_main_win id_plot w_config plot_theta
+global pez_real_drag pez_log pez_precision_ed pez_precision_sli pez_angle_type pez_groupdelay
 
 if nargin<1,
      action='help';
@@ -29,94 +22,118 @@ if strcmp(action,'edit_config'),
   
   if ~any( get(0,'children') == w_config )
         % Open up main control window
-        w_config = figure('resize','on','units','pixels',...
-                  'Pointer','watch',... 
-                  'pos',[600 0 400 150],...
-                  'numbertitle','off','name','PEZ v2.0 : Set Configuration');
-
-
+        w_config = figure('resize','on','units','pixels','pos',[600 0 400 150],...
+                  'numbertitle','off','name','PEZ v3.0 : Edit Configuration');
+        
+        pez_config('load_basic');
+        userdata=get(gcf,'userdata');
+        
         frame_color=[.50 .50 .65];
 
         % Set up Mirror frame
-        uicontrol(w_config, 'style','frame','units','norm','backgroundcolor',frame_color,'pos', [ .05 .80 .45 .20]);
+        uicontrol(w_config, 'style','frame','units','norm','backgroundcolor',frame_color,'pos', [ .02 .80 .45 .15]);
 
         % Set up Add Title Text        
-        uicontrol(w_config,'style','text','units','norm','pos', [ .06 .81 .44 .18],...
-                       'backgroundcolor',frame_color,...
-                       'foregroundcolor',[1 1 1],...
-                       'horizontalalignment','center','string','Set Mirror');
+        uicontrol(w_config,'style','text','units','norm','pos', [ .03 .81 .43 .12],...
+                       'backgroundcolor',frame_color,'foregroundcolor',[1 1 1],...
+                       'horizontalalignment','center','string','Axis Mirroring');
 
         % Set up Mirror frame
-        uicontrol(w_config, 'style','frame','units','norm','backgroundcolor',frame_color,'pos', [ .05 .60 .45 .20]);
+        uicontrol(w_config, 'style','frame','units','norm','backgroundcolor',frame_color,'pos', [ .02 .40 .45 .40]);
 
-        uicontrol('style','checkbox','units','normal', ...
-                         'string','Mirror across X-Axis', ...
-                         'pos',[0.06 0.70 0.44 0.10],...
+        uicontrol('style','checkbox','units','normal','string','Vertically (Conjugates)','pos',[0.03 0.60 0.43 0.14],...
                          'val',mirror_x,'fore',[1 1 1],'back',frame_color,...
-                         'call',' ');
+                         'call',['global mirror_x;mirror_x=get(gco,''val'');set(gco,''val'',mirror_x);']);
 
-        uicontrol('style','checkbox','units','normal', ...
-                         'string','Mirror across Y-Axis', ...
-                         'pos',[0.06 0.61 0.44 0.10],...
+        uicontrol('style','checkbox','units','normal','string','Horizontally', 'pos',[0.03 0.43 0.43 0.14],...
                          'val',mirror_y,'fore',[1 1 1],'back',frame_color,...
-                         'call',' ');
+                         'call','global mirror_y;mirror_y=get(gco,''val'');set(gco,''val'',mirror_y);');
 
-        % Set up Precision frame
-        uicontrol(w_config, 'style','frame','units','norm','backgroundcolor',frame_color,'pos', [ .05 .21 .45 .10]);
+        % Set up Precision frame ---------------------
+        uicontrol(w_config, 'style','frame','units','norm','backgroundcolor',frame_color,'pos', [ .02 .05 .45 .31]);
 
-        % Set up Precision Text        
-        uicontrol(w_config,'style','text','units','norm','pos', [ .06 .20 .44 .10],...
-                       'backgroundcolor',frame_color,...
-                       'foregroundcolor',[1 1 1],...
-                       'horizontalalignment','center','string','Set Mouse Precision');
+         
+        uicontrol('style','text','units','norm','pos', [ .03 .20 .34 .12],...
+                       'backgroundcolor',frame_color,'foregroundcolor',[1 1 1],...
+                       'horizontalalignment','left','string','Adding Precision:');
+  
+        % Gain Entry Box
+        pez_precision_ed = uicontrol('style','edit','units','norm','pos', [.37 .20 .09 .12],...
+                   'horizontalalignment','left','string', num2str(log10(pez_precision)), ...
+                   'val', log10(pez_precision),'call', 'pez_config(''set_precision'',0); ');
+          
+        % Gain Slider
+        pez_precision_sli = uicontrol('Style','slider','Min',1,'Max',10,'pos',[ .03 .07 .43 .10],...
+                      'val',log10(pez_precision),'units','norm',...
+                      'CallBack','pez_config(''set_precision'',1);' );
 
-        % Set up Precision frame
-        uicontrol(w_config, 'style','frame','units','norm','backgroundcolor',frame_color,'pos', [ .05 .05 .45 .15]);
 
-        % Set up Precision Text        
-        uicontrol(w_config,'style','text','units','norm','pos', [ .06 .10 .44 .10],...
-                       'backgroundcolor',frame_color,...
-                       'foregroundcolor',[1 1 1],...
-                       'horizontalalignment','left','string','Accuracy:');
-                         
 
-        % Set up Main window frame
-        uicontrol(w_config, 'style','frame','units','norm','backgroundcolor',frame_color,'pos', [ .55 .80 .45 .20]);
+        % Set up Boot window frame -----------------------------
+        uicontrol(w_config, 'style','frame','units','norm','backgroundcolor',frame_color,'pos', [ .50 .82 .46 .15]);
 
         % Set up Add Title Text        
-        uicontrol(w_config,'style','text','units','norm','pos', [ .55 .81 .44 .18],...
+        uicontrol(w_config,'style','text','units','norm','pos', [ .51 .835 .44 .11],...
                        'backgroundcolor',frame_color,...
                        'foregroundcolor',[1 1 1],...
-                       'horizontalalignment','center','string','Main Window Size');
+                       'horizontalalignment','center','string','Pez Boot Defaults');
 
 
         % Set up main window size frame
-        uicontrol(w_config, 'style','frame','units','norm','backgroundcolor',frame_color,'pos', [ .55 .60 .45 .20]);
+        uicontrol(w_config, 'style','frame','units','norm','backgroundcolor',frame_color,'pos', [ .50 .29 .46 .53]);
 
-        uicontrol('style','checkbox','units','normal', ...
-                         'string','Super Small', ...
-                         'pos',[0.56 0.80 0.44 0.20],...
-                         'val',mirror_x,'fore',[1 1 1],'back',frame_color,...
-                         'call',' ');
+        uicontrol('style','checkbox','units','normal','string','Mag Plots in dB', 'pos',[0.51 0.70 0.44 0.11],...
+                         'val',userdata(1),'fore',[1 1 1],'back',frame_color,...
+                          'call','usertmp=get(gcf,''userdata'');usertmp(1)=get(gco,''val'');set(gcf,''userdata'',usertmp);');
 
-        uicontrol('style','checkbox','units','normal', ...
-                         'string','Small', ...
-                         'pos',[0.56 0.71 0.44 0.10],...
-                         'val',mirror_y,'fore',[1 1 1],'back',frame_color,...
-                         'call',' ');
+        uicontrol('style','checkbox','units','normal', 'string','Phase Grpdly Plot','pos',[0.51 0.59 0.44 0.11],...
+                         'val',userdata(2),'fore',[1 1 1],'back',frame_color,...
+                         'call','usertmp=get(gcf,''userdata'');usertmp(2)=get(gco,''val'');set(gcf,''userdata'',usertmp);');
+                         
+        %-----
+        uicontrol('Units','norm','back',frame_color,'fore',[1 1 1],'Pos',[ .51 .45 .44 .14 ],... 
+                     'Style','popupmenu','horizontalalign','left','val',userdata(3),... 
+                     'string','Tiny Main Window|Small Main Window|Regular Main Window',...
+                     'call','usertmp=get(gcf,''userdata'');usertmp(3)=get(gco,''val'');set(gcf,''userdata'',usertmp);');
+                         
+        uicontrol('Units','norm','back',frame_color,'fore',[1 1 1],'Pos',[ .51 .31 .44 .14 ],... 
+                     'Style','popupmenu','horizontalalign','left','val',userdata(4),... 
+                     'string','Tiny Plot Window|Regular Plot Window|Large Plot Window',...
+                     'call','usertmp=get(gcf,''userdata'');usertmp(4)=get(gco,''val'');set(gcf,''userdata'',usertmp);');
 
-        uicontrol('style','checkbox','units','normal', ...
-                         'string','Regular', ...
-                         'pos',[0.56 0.61 0.44 0.10],...
-                         'val',mirror_y,'fore',[1 1 1],'back',frame_color,...
-                         'call',' ');
 
-        
+        uicontrol('style','push','units','norm','pos', [ .51 .05 .20 .20],...
+                       'horizontalalignment','center','string','Save','call','pez_config(''save_config'');');
+
+        uicontrol('style','push','units','norm','pos', [ .74 .05 .20 .20],...
+                       'horizontalalignment','center','string','Done','call','delete(gcf);');
+              
   else  % Our window is still around, bring it up
      figure(w_config);
   end;     
 
+% ================================
+%  Handle the reset precision
 
+elseif strcmp(action,'set_precision'),
+
+    % See if came from slider or edit
+       if (config_file_name), p_val=get(pez_precision_sli,'val');
+       else,       p_val=str2num(get(pez_precision_ed,'string')); end;
+
+    % Figure out direction  
+       if (p_val>log10(pez_precision)), p_val=ceil(p_val);
+       elseif (p_val<log10(pez_precision)), p_val=floor(p_val); end;
+
+       
+    % Determine if in range
+       if (p_val>=1) & (p_val<=10), pez_precision=10^p_val;
+       elseif (p_val<1),            pez_precision=10;
+       else,                        pez_precision=10^10;   end;
+        
+       set(pez_precision_ed,'string',num2str(log10(pez_precision)));
+       set(pez_precision_sli,'val',log10(pez_precision));
+   
 
 
 % ================================
@@ -124,19 +141,24 @@ if strcmp(action,'edit_config'),
 
 elseif strcmp(action,'load_default'),
 
-  if exist('pez_config.mat')
+  if exist('pez_conf.mat')
 
-      pez_config('set_config','pez_config.mat');
-     
+      pez_config('set_config','pez_conf.mat');
+      
   else
       mirror_x=1;
       mirror_y=0;
-      precision=10;
-      fr_omega= linspace(-pi,pi,1001);
-      frs_omega=linspace(-pi,pi,256);
-      plot_theta=linspace(0,2*pi,70);
-      % -- Windows stay at normal sizes
+      pez_precision=10;
+      pez_real_drag=0;
+      pez_log=0;
+      pez_angle_type=1;
+      pez_groupdelay=0;
+      pez('new_plot_win');
+
   end,      
+  fr_omega= linspace(-pi,pi,1001);
+  frs_omega=linspace(-pi,pi,256);
+  plot_theta=linspace(0,2*pi,70);
 
 
 % ================================
@@ -145,25 +167,67 @@ elseif strcmp(action,'load_default'),
 elseif strcmp(action,'set_config'),
 
       load(config_file_name);
-      fr_omega = linspace(-pi,pi,graph_sampling_rate);
+
+      pez_log        =userdata(1);
+      pez_groupdelay =userdata(2);
+      main_win_size  =userdata(3);
+      plot_win_size  =userdata(4);      
+      mirror_x       =userdata(5);
+      mirror_y       =userdata(6);
+      pez_precision  =userdata(7);
+      pez_real_drag  =userdata(8);
+      pez_angle_type =userdata(9);
       
-      if main_size==1
+     if main_win_size==1
          figure(w_main_win);
-         pez8b('size_supersmall');   
-      elseif main_size==2
+         pez('size_supersmall');   
+      elseif main_win_size==2
          figure(w_main_win);
-         pez8b('size_small');
+         pez('size_small');
+      else
+         figure(w_main_win);
+         pez('size_regular');
       end,
       
-      if plots_size==1
-         figure(w_main_win);
-         pez8b('size2_small');   
-      elseif plots_size==2
-         figure(w_main_win);
-         pez8b('size2_large');
+      pez('new_plot_win');
+      
+      if plot_win_size==1
+         pez('size2_small');   
+      elseif plot_win_size==2
+         pez('size2_regular');
+      else
+         pez('size2_large');
       end,
       
 
+% ================================
+%  Handle the Save Config event
+
+elseif strcmp(action,'save_config'),
+      
+      userdata=get(gcf,'userdata');
+
+      userdata(5) = mirror_x;
+      userdata(6) = mirror_y;
+      userdata(7) = pez_precision;
+      userdata(8) = pez_real_drag;
+      userdata(9) = pez_angle_type;
+      
+      save pez_conf.mat userdata;
+
+% ================================
+%  Handle the load basic event
+elseif strcmp(action,'load_basic'),
+
+  if exist('pez_conf.mat')
+      load pez_conf;
+  else
+      userdata=[ 0 0 3 2];
+  end;
+      
+  set(gcf,'userdata',userdata);
+
+      
 % ================================
 %  No options, churn out the safety message
 else

@@ -1,12 +1,12 @@
 function pez_plot(is_quick)
 %
 %  pez_plot(is_quick) :: These update the plots window.
-%  for PeZ v2.8b last Rev Feb 25  -- No Modifications without author's consent
+%  for PeZ v3.0 last rev June 10,1996  -- No Modifications without author's consent
 %  (type 'pez' in MATLAB to run)
 %  Craig Ulmer / GRiMACE@ee.gatech.edu
 
   global p_list z_list num_poles num_zeros num_diff_poles num_diff_zeros
-  global id_plot fr_omega frs_omega z_axis plot_theta pez_fuz plot_ax pez_log pez_gain
+  global id_plot fr_omega frs_omega z_axis plot_theta pez_fuz plot_ax pez_log pez_gain pez_groupdelay
 
   %---- Switch to the plot window, recreate if necessary ------------
     if  ~any( get(0,'children') == id_plot )
@@ -93,7 +93,7 @@ function pez_plot(is_quick)
     zero_zeropad=length(zztmp(zztmp>max(find(z_poly~=0))));
     pole_zeropad=length(zptmp(zptmp>max(find(p_poly~=0))));
     
-    h=real(filter(z_poly,p_poly, [1; zeros(L,1)]));
+    h=pez_gain*real(filter(z_poly,p_poly, [1; zeros(L,1)]));
     
     start_place=0;
     if pole_zeropad
@@ -112,7 +112,7 @@ function pez_plot(is_quick)
     cla;
     if is_quick
        hfreq=pez_freq(z_poly,p_poly,frs_omega);
-       hfreq=exp(j*frs_omega*shifter_val).*hfreq;
+       hfreq=exp(j*frs_omega*shifter_val).*hfreq*pez_gain;
        if (pez_log)
          db_value=20*log10(abs(hfreq));
          plot(frs_omega/pi,db_value, [-1 1], [0 0]);
@@ -124,12 +124,12 @@ function pez_plot(is_quick)
 
        else
          axis('auto');
-         plot(frs_omega/pi,pez_gain*abs(hfreq), [-1 1], [0 0]);
+         plot(frs_omega/pi,abs(hfreq), [-1 1], [0 0]);
          title('Magnitude of Frequency Response'); 
        end;  
     else
        hfreq=pez_freq(z_poly,p_poly,fr_omega);
-       hfreq=exp(j*fr_omega*shifter_val).*hfreq;
+       hfreq=exp(j*fr_omega*shifter_val).*hfreq*pez_gain;
        if (pez_log)
          db_value=20*log10(abs(hfreq));
          plot(fr_omega/pi,db_value, [-1 1], [0 0]);
@@ -141,17 +141,33 @@ function pez_plot(is_quick)
 		 
        else  
          axis('auto');
-         plot(fr_omega/pi,pez_gain*abs(hfreq), [-1 1], [0 0]);
+         plot(fr_omega/pi,abs(hfreq), [-1 1], [0 0]);
 		 title('Magnitude of Frequency Response');
        end;  
     end;   
 
   %---- Do the Phase Plot -------------------------------------------
     axes(plot_ax(4));
+    axis('auto');
     cla;
-    if is_quick
-       plot(frs_omega/pi,angle(hfreq),[-1 1], [0 0]);
+    if ~pez_groupdelay,
+
+          if is_quick, plot(frs_omega/pi,angle(hfreq),[-1 1], [0 0]);
+          else,        plot(fr_omega/pi,angle(hfreq),[-1 1], [0 0]);  end;
+          title('Phase of Frequency Response');
+          ylabel('radians');
+          axtmp=axis;
     else
-       plot(fr_omega/pi,angle(hfreq),[-1 1], [0 0]);
+          if is_quick,  plot(frs_omega/pi,grpdelay(z_poly,p_poly,frs_omega),[-1 1], [0 0]);
+          else,         plot(fr_omega/pi,grpdelay(z_poly,p_poly,fr_omega),[-1 1], [0 0]);  end;
+          title('Group Delay of Frequency Response'); 
+          ylabel('# Samples')
+          axtmp=axis;
+          axtmp(3)=max(-90*1.05,axtmp(3) );
+          axtmp(4)=min( 90*1.05,axtmp(4) );
+          
     end;
+    if (pez_log),axtmp([1 2])=[0 1];
+    else,        axtmp([1 2])=[-1 1]; end;
+    axis(axtmp);
     
