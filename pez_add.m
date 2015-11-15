@@ -1,12 +1,12 @@
-function pez_add(new,is_a_pole)
+function pez_add(new,is_a_pole,weight)
 %
 %  pez_add(cartesian,is_a_pole) :: Root routine for pole or zero add
-%  for PeZ v2.8b last Rev Feb 25  -- No Modifications without author's consent
+%  for PeZ v3.0 last Rev June 10,1996  -- No Modifications without author's consent
 %  (type 'pez' in MATLAB to run)
 %  Craig Ulmer / GRiMACE@ee.gatech.edu
 
-   global place weight precision pez_fuz axes_zplane p_list z_list num_poles num_zeros num_diff_poles num_diff_zeros
-   global axes_zplane
+   global pez_precision pez_fuz axes_zplane p_list z_list num_poles num_zeros num_diff_poles num_diff_zeros
+   global w_main_win
  
    if is_a_pole
       a_list=p_list;
@@ -24,23 +24,24 @@ function pez_add(new,is_a_pole)
       num_diff_b=num_diff_poles;
    end;   
       
+
          axes(axes_zplane);
          
          place=0;
           
-         if (num_a)   
-           place=pez_is_hit(new(1),new(2),a_list(:,1),a_list(:,2),precision);
+         if num_a   
+           place=pez_hit(new(1),new(2),a_list(:,1),a_list(:,2),pez_precision);
          end;   
          
          t_weight=weight;
-         num_a=num_a+t_weight;  % -- add weight 
+         num_a=num_a+t_weight;  % -- add weight
          
-         if ((num_b)&(~place))
-           warn=pez_is_hit(new(1),new(2),b_list(:,1),b_list(:,2),precision);
+         if num_b
+           warn=pez_hit(new(1),new(2),b_list(:,1),b_list(:,2),pez_precision);
            if (warn~=0)
                 % -- There is already a ZERO here, we have a CONTEST
                 % -- We know that there could not be a POLE here
-                if (b_list(warn,4) <= t_weight)
+                if b_list(warn,4) <= t_weight
                          % -- we know there were multi zeros, but fewer than new additions
                          t_weight=t_weight-b_list(warn,4);
                          num_a=num_a-b_list(warn,4);
@@ -53,7 +54,7 @@ function pez_add(new,is_a_pole)
                          
                          delete(b_list(warn,3));
                          
-                         if (warn~=num_diff_b)
+                         if warn~=num_diff_b
                              b_list(warn:num_diff_b-1,:)=b_list(warn+1:num_diff_b,:);
                          end;
                          
@@ -92,10 +93,12 @@ function pez_add(new,is_a_pole)
               axes(axes_zplane);
               a_list(place,1)=new(1);
               a_list(place,2)=new(2);
-              if (is_a_pole)
-                  a_list(place,3)=plot(new(1,1),new(1,2),'x','erasemode','background');
+              if is_a_pole
+                  a_list(place,3)=plot(new(1),new(2),'x','erasemode','background',...
+                      'ButtonDownFcn','global w_main_win;set(w_main_win,''WindowButtonUpFcn'',''pez_bin(''''moveup'''')'');pez_bin(''movedown_b'',gco);');
               else
-                  a_list(place,3)=plot(new(1,1),new(1,2),'o','erasemode','background');
+                  a_list(place,3)=plot(new(1),new(2),'o','erasemode','background',...
+                      'ButtonDownFcn','global w_main_win;set(w_main_win,''WindowButtonUpFcn'',''pez_bin(''''moveup'''')'');pez_bin(''movedown_b'',gco);');
               end;    
               a_list(place,4)=1;
               a_list(place,5)=0;
@@ -109,7 +112,11 @@ function pez_add(new,is_a_pole)
                   %-- new handle
                   a_list(place,4)=a_list(place,4)+t_weight; 
                   
-                  a_list(place,5)=text(a_list(place,1)+pez_fuz,a_list(place,2)+pez_fuz,num2str(a_list(place,4)) );
+                  a_list(place,5)=text(a_list(place,1)+pez_fuz,a_list(place,2)+pez_fuz,num2str(a_list(place,4)),'erasemode','background',...
+                      'ButtonDownFcn',['global w_main_win;',...
+                      'set(w_main_win,''WindowButtonUpFcn'',''pez_bin(''''moveup'''')'');',...
+                      'pez_bin(''movedown_b'' ,',num2str(a_list(place,3),32) ,');' ]);
+                     
               else
                   %-- old handle - we already have multiple occurrances         
                   a_list(place,4)=a_list(place,4)+t_weight; 

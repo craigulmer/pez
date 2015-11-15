@@ -1,9 +1,10 @@
 function anz=pez_exp(data_points,occs)
 %
-%  pez_exp() :: Routine for expanding the pez internal rep to a root list
-%  for PeZ v2.8b last Rev Feb 25  -- No Modifications without author's consent
+%  pez_exp() :: Expands set without for loops
+%  for PeZ v3.0 last rev June 10,1996  -- No Modifications without author's consent
 %  (type 'pez' in MATLAB to run)
 %  Craig Ulmer / GRiMACE@ee.gatech.edu
+
 
 %This will elaborate a list as follows
 %  data_points -- a linear array of data points
