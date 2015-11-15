@@ -1,89 +1,96 @@
 function pez_plot(is_quick)
 %
 %  pez_plot(is_quick) :: These update the plots window.
-%  for PeZ v3.0 last rev June 10,1996  -- No Modifications without author's consent
+%  for PeZ v3.1beta last Rev 9/22/97  -- No Modifications without author's consent
 %  (type 'pez' in MATLAB to run)
 %  Craig Ulmer / GRiMACE@ee.gatech.edu
+
+  global mat_version aspect_ratio_name fixed_aspect;
+  global pez_redraw_type;
+  global pez_stemx pez_stemy;
+
 
   global p_list z_list num_poles num_zeros num_diff_poles num_diff_zeros
   global id_plot fr_omega frs_omega z_axis plot_theta pez_fuz plot_ax pez_log pez_gain pez_groupdelay
 
   %---- Switch to the plot window, recreate if necessary ------------
     if  ~any( get(0,'children') == id_plot )
-          pez('new_plot_win');
+	  pez('new_plot_win');
+	  new=1;                   %x
+	  figure(id_plot);         %x
     end, 
 
-    set(id_plot,'visible','on');    
-    figure(id_plot);
+    set(id_plot,'visible','on');
+    h_data=get(id_plot,'user');    
 
   %---- Fix the list as Polynomials ---------------------------------  
     if (num_diff_poles == 0 )      
-         tmp_p_list = 0;
-         p_poly=[];
+	 tmp_p_list = 0;
+	 p_poly=[];
     else 
-         tmp_p_list=p_list(:,1)+j*p_list(:,2);
-         tmp_p_list=pez_exp( tmp_p_list,p_list(:,4) ); 
-         p_poly=poly(tmp_p_list); 
+	 tmp_p_list=p_list(:,1)+j*p_list(:,2);
+	 tmp_p_list=pez_exp( tmp_p_list,p_list(:,4) ); 
+	 p_poly=poly(tmp_p_list); 
     end;
-        
+	
     if (num_diff_zeros == 0 )
-         tmp_z_list = 0;
-         z_poly=[];
+	 tmp_z_list = 0;
+	 z_poly=[];
     else
-         tmp_z_list=z_list(:,1)+j*z_list(:,2);
-         tmp_z_list=pez_exp( tmp_z_list,z_list(:,4) );  
-         z_poly=poly(tmp_z_list);
+	 tmp_z_list=z_list(:,1)+j*z_list(:,2);
+	 tmp_z_list=pez_exp( tmp_z_list,z_list(:,4) );  
+	 z_poly=poly(tmp_z_list);
     end;
      
   %---- Do the Pole-Zero Plot ---------------------------------------
-    axes(plot_ax(1));
-    cla;
-    set(gca,'box','on','aspect',[1 1]);
-  
-    hold on;
-  
-    plot(cos(plot_theta),sin(plot_theta),':',[-10; 10],[0;0],':y',[0;0],[-10; 10],':y','erasemode','xor');
+
+    if (~is_quick) %Redraws all
+      axes(plot_ax(1));
+      cla;       
+      plot(cos(plot_theta),sin(plot_theta),':y',[-10; 10],[0;0],':y',[0;0],[-10; 10],':y','erasemode',pez_redraw_type);
+      h_data(1)=plot(0,0,'erasemode',pez_redraw_type,'color','yellow');  %x's
+      h_data(2)=plot(0,0,'erasemode',pez_redraw_type,'color','yellow');  %o's
+      set(gcf,'userdata',h_data);
+    end;
 
     if num_poles
-      plot(p_list(:,1),p_list(:,2),'x');
+      set(h_data(1),'xdata',p_list(:,1),'ydata',p_list(:,2),'linestyle','x','color','yellow');
      
-      num_array(:,1:2 )=p_list(:,1:2)+pez_fuz;
-      num_array(:,3)=p_list(:,4);
-      num_array((num_array(:,3)==1),:)=[];
-      if ~isempty(num_array)
-        for loops_suck=1:length(num_array(:,1)),
-         text(num_array(loops_suck,1),num_array(loops_suck,2),num2str(num_array(loops_suck,3)));
-        end;   
-      end;  
-      
+      if(~is_quick)%Only draw if redrawing all
+	  num_array(:,1:2 )=p_list(:,1:2)+pez_fuz;
+	  num_array(:,3)=p_list(:,4);
+	  num_array((num_array(:,3)==1),:)=[];
+	  if ~isempty(num_array)
+	    for loops_suck=1:length(num_array(:,1)),
+	       text(num_array(loops_suck,1),num_array(loops_suck,2),num2str(num_array(loops_suck,3)),'color','white');
+	    end;   
+	  end;  
+      end;%isquick
     end;
     
     num_array=[];
     
     if num_zeros
-      plot(z_list(:,1),z_list(:,2),'o');
-            
-      num_array(:,1:2 )=z_list(:,1:2)+pez_fuz;
-      num_array(:,3)=z_list(:,4);
-      num_array((num_array(:,3)==1),:)=[];
-      if ~isempty(num_array)
-         for loops_suck=1:length(num_array(:,1)),
-          text(num_array(loops_suck,1),num_array(loops_suck,2),num2str(num_array(loops_suck,3)));
-         end;   
-      end;
-   
-    end;  
-    xlabel('Real part')
-    ylabel('Imaginary part')
+      set(h_data(2),'xdata',z_list(:,1),'ydata',z_list(:,2),'linestyle','o','color','yellow');
 
-    axis([-z_axis z_axis -z_axis z_axis]);
+      if(~is_quick) %only draw if redrawing all
+	  num_array(:,1:2 )=z_list(:,1:2)+pez_fuz;
+	  num_array(:,3)=z_list(:,4);
+	  num_array((num_array(:,3)==1),:)=[];
+	  if ~isempty(num_array)
+	    for loops_suck=1:length(num_array(:,1)),
+	      text(num_array(loops_suck,1),num_array(loops_suck,2),num2str(num_array(loops_suck,3)),'color','white' );
+	    end;   
+	 end;
+      end; %isquick
+    end; %num_zeros
+  
+    if(~is_quick), axis([-z_axis z_axis -z_axis z_axis]); end;
 
   %---- Do the Impulse Response -------------------------------------
-    axes(plot_ax(2));
-    cla;
-    L=50;
+    L=49;
     if (num_poles==0 & num_zeros<10)  L=10;
-      elseif (num_poles==0 & num_zeros>=10) L=num_zeros; end,
+      elseif (num_poles==0 & num_zeros>=10 & num_zeros<49 ) L=num_zeros; end,
     
     if (num_zeros==0) z_poly=1; end,
     if (num_poles==0) p_poly=1; end,
@@ -102,72 +109,66 @@ function pez_plot(is_quick)
     if zero_zeropad,
        start_place=-zero_zeropad;
     end;
+
+    if(length(h)>50), h=h(1:50); end; %Truncate if necessary
        
-    stem(start_place:(start_place+length(h)-1),h)
+    set(h_data(3),'xdata',start_place:(start_place+length(h)-1),...
+		  'ydata',h, 'linestyle','o','erasemode',pez_redraw_type);
     
+    out_stem=pez_stemy(1:3*length(h));
+    out_stem(2:3:3*length(h))=h;
+
+    set(h_data(4),'xdata',pez_stemx(1:3*length(h))+start_place,...
+		  'ydata',out_stem,'erasemode',pez_redraw_type);
+
+    if(~is_quick),
+	set(plot_ax(2),'xlim',[start_place-2 length(h)+start_place+2],...
+		      'ylim',[ 1.1*min([-1; h]) 1.1*max([1; h]) ]      );
+    end;
+ 
     shifter_val=zero_zeropad-pole_zeropad;
     
   %---- Do the Magnitude Plot ---------------------------------------
-    axes(plot_ax(3));
-    cla;
+
     if is_quick
        hfreq=pez_freq(z_poly,p_poly,frs_omega);
        hfreq=exp(j*frs_omega*shifter_val).*hfreq*pez_gain;
        if (pez_log)
-         db_value=20*log10(abs(hfreq));
-         plot(frs_omega/pi,db_value, [-1 1], [0 0]);
-         title('Magnitude of Frequency Response(dB)');
-
-	 mag_range=[0 1 max([1.05*min(db_value-1) -120]) 1.05*max(db_value)];
-         axis(mag_range);
-         grid on;
-
+	 db_value=20*log10(abs(hfreq));
+	 set(h_data(5),'xdata',frs_omega/2/pi,'ydata',db_value);
        else
-         axis('auto');
-         plot(frs_omega/pi,abs(hfreq), [-1 1], [0 0]);
-         title('Magnitude of Frequency Response'); 
+	  set(h_data(5),'xdata',frs_omega/2/pi,'ydata',abs(hfreq) );
        end;  
     else
        hfreq=pez_freq(z_poly,p_poly,fr_omega);
        hfreq=exp(j*fr_omega*shifter_val).*hfreq*pez_gain;
        if (pez_log)
-         db_value=20*log10(abs(hfreq));
-         plot(fr_omega/pi,db_value, [-1 1], [0 0]);
-         title('Magnitude of Frequency Response(dB)');
-         
-	 mag_range=[0 1 max([1.05*min(db_value-1) -120]) 1.05*max(db_value)];
-         axis(mag_range);
-         grid on;
-		 
+	 db_value=20*log10(abs(hfreq));
+	 set(h_data(5),'xdata',fr_omega/2/pi,'ydata',db_value);
+	 set(plot_ax(3),'ylim', [ max([1.05*min(db_value-1) -120]) 1.05*max([1 db_value])]);
        else  
-         axis('auto');
-         plot(fr_omega/pi,abs(hfreq), [-1 1], [0 0]);
-		 title('Magnitude of Frequency Response');
+	 set(h_data(5),'xdata',fr_omega/2/pi,'ydata',abs(hfreq) );
+	 set( plot_ax(3),'ylim',[ -0.05 1.05*max([1 abs(hfreq)])  ]);
        end;  
     end;   
 
   %---- Do the Phase Plot -------------------------------------------
-    axes(plot_ax(4));
-    axis('auto');
-    cla;
     if ~pez_groupdelay,
-
-          if is_quick, plot(frs_omega/pi,angle(hfreq),[-1 1], [0 0]);
-          else,        plot(fr_omega/pi,angle(hfreq),[-1 1], [0 0]);  end;
-          title('Phase of Frequency Response');
-          ylabel('radians');
-          axtmp=axis;
+	  if is_quick,
+	      set(h_data(6),'xdata',frs_omega/2/pi, 'ydata',angle(hfreq));
+	  else,
+	      data_angle=angle(hfreq);
+	      set(h_data(6),'xdata',fr_omega/2/pi,'ydata',data_angle);
+	      set(plot_ax(4),'ylim',[1.05*min([-1 data_angle]) 1.05*max([1 data_angle])]);
+	 end;
     else
-          if is_quick,  plot(frs_omega/pi,grpdelay(z_poly,p_poly,frs_omega),[-1 1], [0 0]);
-          else,         plot(fr_omega/pi,grpdelay(z_poly,p_poly,fr_omega),[-1 1], [0 0]);  end;
-          title('Group Delay of Frequency Response'); 
-          ylabel('# Samples')
-          axtmp=axis;
-          axtmp(3)=max(-90*1.05,axtmp(3) );
-          axtmp(4)=min( 90*1.05,axtmp(4) );
-          
-    end;
-    if (pez_log),axtmp([1 2])=[0 1];
-    else,        axtmp([1 2])=[-1 1]; end;
-    axis(axtmp);
+	  if is_quick,
+	      set(h_data(6),'xdata',frs_omega/2/pi,'ydata',grpdelay(z_poly,p_poly,frs_omega) );
+	  else,
+	      data_grp=grpdelay(z_poly,p_poly,fr_omega);
+	      set(h_data(6),'xdata',fr_omega/2/pi,'ydata',data_grp );
+	      set(plot_ax(4),'ylim',[ 1.05*min([-1 data_grp]) 1.05*max([1 data_grp])] );
+ end;
+end;
     
+

@@ -1,0 +1,111 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="Author" CONTENT="Craig Ulmer">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.03 [en] (X11; I; HP-UX B.10.20 9000/770) [Netscape]">
+   <TITLE>pez_edit</TITLE>
+</HEAD>
+<BODY>
+&nbsp;
+<TABLE BORDER=0 COLS=2 WIDTH="100%" >
+<TR>
+<TD>
+<H1>
+Edit Poles and Zeros</H1>
+</TD>
+
+<TD>
+<DIV ALIGN=right><IMG SRC="graphics/pez_edbu.gif" NOSAVE HEIGHT=74 WIDTH=196></DIV>
+</TD>
+</TR>
+</TABLE>
+By pressing the Edit By Co-Ord button from the main menu, the user may
+numerically edit any Pole or Zero in the complex Z-Plane. The following
+menu will appear for the user to make changes to the filter:
+
+<P>&nbsp;
+<CENTER><IMG SRC="graphics/pez_edit.gif" NOSAVE HEIGHT=323 WIDTH=424></CENTER>
+&nbsp;
+<BR>&nbsp;
+
+<P>The basic procedure for editing a pole/zero's co-ordinates is to
+<OL>
+<LI>
+Press the Select a Pole or Zero Button</LI>
+
+<LI>
+With the cross-haired cursor, select a pole/zero to edit. If a pole/zero
+was selected, values will appear in the real/imag/mag/angle edit boxes,
+and the Make Current Change button will appear. (Aligning the cross-hairs
+may not always be easy)</LI>
+
+<LI>
+Edit the Co-Ordinates numerically, <B>pressing enter after each change</B>.
+PeZ only reads an edit box when it receives an enter.</LI>
+
+<LI>
+Press the Make Current Change button to finalize the change.</LI>
+</OL>
+Next to the Angle edit box is a selection list that allows the user to
+change between different angle units and normalizations. Selecting it will
+adjust the necessary co-ordinates.
+
+<P>When done, press the Done Editing button to return to the main menu.
+<BR>
+<HR WIDTH="100%">
+<BR>&nbsp;
+<CENTER><TABLE COLS=2 WIDTH="100%" NOSAVE >
+<TR NOSAVE>
+<TD NOSAVE>
+<H2>
+<A NAME="Edit by Mouse Drag"></A>Edit by Mouse Drag</H2>
+</TD>
+
+<TD>
+<DIV ALIGN=right><IMG SRC="graphics/pez_rt.gif" NOSAVE HEIGHT=65 WIDTH=234></DIV>
+</TD>
+</TR>
+</TABLE></CENTER>
+
+
+<P>&nbsp;PeZ allows users to move poles and zeros graphically with the
+mouse. Simply hold the left mouse button down while the mouse is above
+a pole or zero, and move it around the Z-Plane without letting go of the
+left mouse button. To make selection easier, the user may also click on
+a pole's or zero's multiplicity in the same manner and PeZ will understand
+that the particular pole/zero is to be moved.
+<BR>&nbsp;
+<H2>
+Real-Time Mouse Drag</H2>
+Clicking on the Real Time Drag Plots checkbox tells PeZ that the user wants
+to see how the plots looks as the user drags poles or zeros around in the
+Z-Plane. While a great deal of work has been done to optimize calculations
+for real-time plotting, some machines may not be able to keep up with the
+user's pole/zero dragging. Should the PeZ fail to keep up with the user,
+turn off the Real-Time Drag Plots option to move poles and zeros smoothly.
+
+<P>While a user is moving a pole/zero around with the rt-drag option turned
+on, the figure plots' axis are held constant to the scale of their starting
+values. This helps give users a better idea of how the positioning affects
+the plots, relative to a constant scaling. When a position is finalized
+by releasing the mouse button, PeZ rescales the axis to better show the
+new data points.
+
+<P>Implementation note: Due to inconsistencies in the Macintosh's version
+of Matlab, the real-time display will not be as smooth as on other computers.
+This appears to be a bug for Matlab v5.1, but in any case the real-time
+plotting should be acceptable.
+<BR>&nbsp;
+<BR>&nbsp;
+
+<P>
+<HR WIDTH="100%">
+<CENTER><FONT SIZE=+2>[ <A HREF="index.htm">Intro</A> <A HREF="pez_func.htm">Functionality</A>
+<A HREF="pez_add.htm">Add/Delete</A> <A HREF="pez_edit.htm">Edit</A> <A HREF="pez_import.htm">Import</A>
+<A HREF="pez_export.htm">Export</A> ]</FONT></CENTER>
+
+<CENTER><FONT SIZE=+2><A HREF="pez_add.htm">&lt;&lt; Previous</A> <A HREF="pez_import.htm">Next
+>></A></FONT></CENTER>
+&nbsp;
+</BODY>
+</HTML>

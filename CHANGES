@@ -1,0 +1,104 @@
+Changes in PeZ 3.1 (Sep 29,1997)
+~~~~~~~~~~~~~~~~~~
+Changes:
+- Big Upgrade to Matlab 5.x. Now recognizes version/machine and runs accordingly
+- Big speed improvements in the rt-drag. Now uses Xor EXCEPT on MACs. Macs
+   seem to have some kind of update bug with Xor plots- they don't draw the
+   plot initially. Macs instead use normal updates.
+- Non-integer gains: Now accepts values from 0:30, decimal. 
+- Changed Frequency plots axis for sampling normalization(Dr. McClellan)
+- Added red origin line for impulse response plots, cyan colors for others
+
+Matlab v5.x Changes:
+**WindowButtonMotionFcn/WindowButtonUpFcn:
+
+      There seems to be a conceptual disagreement with Matlab 5.0's window
+      functions. Matlab is more or less sequential code, right? Well, it
+      appears as though you can continue to get WindowButtonMotion calls
+      even while you're handling a WindowButtonUpFcn. The short- if you
+      were still moving the mouse while you let go of the button, you were
+      likely to have the buttonup command manipulate data that the motion
+      functions were about to manipulate. I've put a semaphore around the
+      code to half-fix this, but I disagree with the apparent implementation
+      that window functions are _not_ atomic.
+
+
+**uiput/get_file: Had to change the cals around a little because old version was
+      just using uigetfile to get a filename.  5.0 checks for a valid file,
+      so you couldn't use it to export a file.
+
+**isempty() vs ==[] comparing: 5.0 gives a warning if checking (a==b) if b=[].
+      made the isempty() calls explicit. There's still one or two somewhere..
+
+**ginput() refresh: Added a refresh every time ginput() is used because the 
+      cursor would disappear on the second call. Not sure why. The refresh
+      works, though the cursor does not appear until the mouse gets moved..?
+
+
+**.mat files: Looks like there's a difference between v5 and v4 .mat data files.
+
+**plot colors: Mv5.x has white backgrounds. Changed all to explicit calls.
+
+
+
+Changes in PeZ 3.0 (June 10,1996)
+~~~~~~~~~~~~~~~~~~
+(Major Changes)
+
+
+- Pez Configuration Window
+  - Set mirroring (At the request of some people that wanted complex
+				   filters/uneven Mag plots)
+  - Set Precision (ie, how close two objects can be before being merged)
+  - Boot Options(Sizes, Plot configs,etc)
+
+- Graphical Panel for Import/Export Options, including:
+  - Add by Poly/Root equations
+  - Import (extract) from Matlab .MAT data file
+  - Import from "filtdemo"
+  - Export to Matlab file
+  
+- Filter Gain control
+
+- First stab at Group Delay function
+
+- Now using Mathwork's "Printer Dialogue Box"-->uiprint (more options)
+  ::  Thanks to D.L. Hallman  Herrick Labs/Purdue University for  ::
+  ::   allowing me to include this and make a few modifications   ::
+  
+- Fixed minor real-time drag move with Horizontal mirroring.
+
+- Moved pez_is_hit to pez_hit, for MSW3.1's 8.3 filename(worked
+	before, but some people had trouble unarchiving)
+
+- Ditched the Edit Point-2-Point option, no longer needed
+
+- Cleaned up exit routine(Now cleans out all variables used)	
+
+	
+	
+
+Changes in PeZ 2.8 (Not really given out to anyone)
+~~~~~~~~~~~~~~~~~~
+
+- Fixed the all-pass add.  Used to be a mirror across the unit circle,
+    now is the more practical   r and 1/r.
+
+- Moved into speed redraws: now uses xors for erasing, therefore can
+    greatly speed up moving of objects. Note that for Drag & Draw, this
+    fixes the mag/phase plot axis, but in my opinion this is a plus.
+    I see it as more useful to see changes made without rescaling the axis.
+    
+- Can now drag by just clicking on the object. No more "Drag w/ Mouse" 
+    button! Much easier, and uses Matlab for object identification
+    instead of own calculations. 
+
+- Added Magnitude in dB optionfor plots
+
+- Recoded all of the move functions. More consistent style, tighter
+	code, and converted to functions (before it was scripted).
+
+- Made pez_import() function
+
+- Started making things less global
+

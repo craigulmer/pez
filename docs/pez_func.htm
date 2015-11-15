@@ -1,0 +1,157 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="Author" CONTENT="Craig Ulmer">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.03 [en] (X11; I; HP-UX B.10.20 9000/770) [Netscape]">
+   <TITLE>pez_func</TITLE>
+</HEAD>
+<BODY>
+
+<H1>
+PeZ Functionality</H1>
+
+<HR WIDTH="100%">
+<H2>
+Starting PeZ</H2>
+The booting procedure is as follows:
+<OL>
+<LI>
+Start Matlab</LI>
+
+<LI>
+Start PeZ in the Matlab window by cd'ing to the pez directory, and typing
+'pez' (Note that v5.x of Matlab may have one warning message)</LI>
+
+<LI>
+Start filtdemo <A HREF="pez_import.htm#Grab Filtdemo">if desired</A></LI>
+</OL>
+Notes:
+<UL>
+<LI>
+PeZ has been tested with Matlab 4.2c-5.1, on Macs, PC's, and Unix (HP's
+and Suns).</LI>
+
+<LI>
+GUI's look different from machine to machine (and I'm sorry for Win95)</LI>
+
+<LI>
+Only one version of PeZ may be run at a time for each Matlab shell (because
+of global vars)</LI>
+</UL>
+
+<HR WIDTH="100%">
+<H2>
+PeZ Windows</H2>
+There are two figure windows to PeZ: the <A HREF="#Control">main control</A>
+window, the <A HREF="#Plot">plot</A> window, and the <A HREF="#Pez Configuration">configuration</A>
+window.
+<BR>&nbsp;
+<H3>
+<A NAME="Control"></A>Main Control Window</H3>
+The Control Window is the below figure that does all of the filter editing
+work for PeZ.&nbsp; On the left hand side there is a complex Z-Plane where
+poles and zeros are maintained and edited. The objects in this Z-Plane
+are all user controllable: you may select a pole or zero and simply drag
+it from its current location to a new destination. If the Real Time Drag
+Plots checkbox is selected, the updates in the plot window are made as
+the user drags the pole/zero around in the Z-Plane. Basic help information
+appears in the lower right hand corner for various operations.
+<BR>&nbsp;
+<CENTER><IMG SRC="graphics/pez_main.gif" NOSAVE HEIGHT=524 WIDTH=810></CENTER>
+
+
+<P>The remaining buttons are documented below.
+<BR>&nbsp;
+<CENTER><TABLE BORDER=2 WIDTH="38%" NOSAVE >
+<TR>
+<TD><A HREF="pez_add.htm#Add One-At-A-Time">Add One-At-A-Time</A></TD>
+
+<TD><A HREF="pez_edit.htm">Edit by Co-Ordinate</A></TD>
+</TR>
+
+<TR>
+<TD><A HREF="pez_add.htm#Add Multiple">Add Multiple</A></TD>
+
+<TD><A HREF="pez_add.htm#Gain">Filter Gain</A></TD>
+</TR>
+
+<TR>
+<TD><A HREF="pez_add.htm#Add Double">Add Double</A></TD>
+
+<TD><A HREF="pez_import.htm">Import Filter Data</A></TD>
+</TR>
+
+<TR>
+<TD><A HREF="pez_add.htm#Multiplicity">Multiplicity</A></TD>
+
+<TD><A HREF="pez_export.htm">Export Filter Data</A></TD>
+</TR>
+
+<TR NOSAVE>
+<TD NOSAVE></TD>
+
+<TD><A HREF="pez_add.htm#Deleting Poles/Zeros">Select Delete</A></TD>
+</TR>
+</TABLE></CENTER>
+&nbsp;
+<H3>
+
+<HR WIDTH="100%"><A NAME="Plot"></A>Plot Window</H3>
+The Plot window display all of the filter's responses.
+<CENTER><IMG SRC="graphics/pez_plot.gif" NOSAVE HEIGHT=520 WIDTH=461></CENTER>
+&nbsp;
+<BR>&nbsp;
+<BR>The checkboxes at the top of the window allow the user to change the
+magnitude to dB and the phase to Group Delay.
+
+<P><B>Printing:</B> Due to the differences in printing between the versions
+of Matlab and OS's, the OS version of the print commands have been used
+as much as possible. That means that if there is not a print command naturally
+found in a figure window, PeZ adds one. However, most printing routines
+include the gui menu bar at the top of the figure window. Therefore, on
+most machines the user has an option to <B>hide the gui bar</B> by looking
+under the &lt;PEZ Display Ops> menu option.
+
+<P>
+<HR WIDTH="100%">
+<H3>
+<A NAME="Pez Configuration"></A>Pez Configuration Window</H3>
+The Pez Configuration Window allows the user to specify settings, including
+bootup defaults.
+<BR>&nbsp;
+<CENTER><IMG SRC="graphics/pez_conf.gif" NOSAVE HEIGHT=208 WIDTH=410></CENTER>
+
+<CENTER>&nbsp;</CENTER>
+
+<UL>
+<LI>
+<B>Axis Mirroring:</B> These checkboxes determine how PeZ mirrors poles
+and zeros in the Z-Plane. The default is to mirror vertically since the
+conjugates result in real polynomial filter coefficients.</LI>
+
+<LI>
+<B>Adding Precision:</B> For any operation where a pole/zero is placed
+close to another pole/zero, PeZ checks a small radius to see if there are
+any other objects close by. If it finds an object, it assumes the user
+meant to place the new pole/zero on top of the old object. By increasing
+the adding precision, you decrease the search range for the add, making
+close objects more possible.</LI>
+
+<LI>
+<B>PeZ Boot Defaults:</B> These defaults are saved in a file so that PeZ
+will boot to the specified configuration.</LI>
+</UL>
+&nbsp;
+<BR>&nbsp;
+
+<P>
+<HR WIDTH="100%">
+<CENTER><FONT SIZE=+2>[ <A HREF="index.htm">Intro</A> <A HREF="pez_func.htm">Functionality</A>
+<A HREF="pez_add.htm">Add/Delete</A> <A HREF="pez_edit.htm">Edit</A> <A HREF="pez_import.htm">Import</A>
+<A HREF="pez_export.htm">Export</A> ]</FONT></CENTER>
+
+<CENTER><FONT SIZE=+2><A HREF="index.htm">&lt;&lt; Previous</A> <A HREF="pez_add.htm">Next
+>></A></FONT></CENTER>
+&nbsp;
+</BODY>
+</HTML>

@@ -1,0 +1,208 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="Author" CONTENT="Craig Ulmer">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.03 [en] (X11; I; HP-UX B.10.20 9000/770) [Netscape]">
+   <TITLE>pez_add</TITLE>
+</HEAD>
+<BODY>
+
+<H1>
+Adding/Deleting Poles and Zeros with Multiplicity</H1>
+
+
+<P>PeZ provides a set of add and delete options to allow simpler filter
+design. Each option uses a <A HREF="#Multiplicity">Multiplicity</A> value
+which essentially repeats the addition or deletion at a location multiple
+times. While some of the add options are not intended for beginners, they
+are included for more automated filter design.
+
+<P>&nbsp;&nbsp;&nbsp; Setting the <A HREF="#Gain">Gain</A>
+<BR>&nbsp;&nbsp;&nbsp; Add Options: <A HREF="#Add One-At-A-Time">One-At-A-Time</A>,
+<A HREF="#Add Multiple">Multiple</A>, and <A HREF="#Add Double">Double</A>
+<BR>&nbsp;&nbsp;&nbsp; <A HREF="#Deleting Poles/Zeros">Delete Options</A>
+
+<P>&nbsp;
+<BR>
+<HR WIDTH="100%">
+<BR>&nbsp;
+<TABLE BORDER=0 COLS=2 WIDTH="100%" >
+<TR>
+<TD>
+<H2>
+<A NAME="Multiplicity"></A>Multiplicity</H2>
+</TD>
+
+<TD>
+<DIV ALIGN=right><IMG SRC="graphics/pez_mult.gif" NOSAVE HEIGHT=69 WIDTH=189></DIV>
+</TD>
+</TR>
+</TABLE>
+Multiplicity in PeZ means the number or poles or zeros used for the next
+operation. PeZ keeps tract of how many poles or zeros are at a particular
+location and represents that number next to the X or O. Note that multiplicity
+applies to all operations, including delete and import.
+<BR>&nbsp;
+<BR>
+<HR WIDTH="100%">
+<BR>&nbsp;
+<TABLE BORDER=0 COLS=2 WIDTH="100%" >
+<TR>
+<TD>
+<H2>
+<A NAME="Gain"></A>Gain</H2>
+</TD>
+
+<TD>
+<DIV ALIGN=right><IMG SRC="graphics/pez_gain.gif" NOSAVE HEIGHT=65 WIDTH=203></DIV>
+</TD>
+</TR>
+</TABLE>
+For the filter being designed with PeZ there is one Gain factor to adjust
+the scaling of amplitude. While importing or adding multiple filters into
+the Z-Plane may be seen as cascading, there is still only one overall gain.
+Note that the importing of filters in such cascades may affect the gain
+if non-unitary values are used.
+
+<P>
+<HR WIDTH="100%">
+<BR>&nbsp;
+<TABLE BORDER=0 COLS=2 WIDTH="100%" >
+<TR>
+<TD>
+<H2>
+<A NAME="Add One-At-A-Time"></A>Add One-At-A-Time</H2>
+</TD>
+
+<TD>
+<DIV ALIGN=right><IMG SRC="graphics/pez_addo.gif" NOSAVE HEIGHT=83 WIDTH=187></DIV>
+</TD>
+</TR>
+</TABLE>
+This option is the most basic for adding a pole or zero. The user clicks
+on either the pole or zero button under "Add One-At-A-Time", and then selects
+the location in the complex Z-Plane for the new pole or zero. Once the
+pole or zero button has been hit, the user can abort adding a new pole
+or zero by clicking outside of the complex Z-Plane. Note that the mouse
+turns into a cross hair while the user selects the destination, and that
+the current multiplicity is applied to the new pole or zero.
+<BR>&nbsp;
+<BR>
+<HR WIDTH="100%">
+<TABLE BORDER=0 COLS=2 WIDTH="100%" >
+<TR>
+<TD>
+<H2>
+<A NAME="Add Multiple"></A>Add Multiple</H2>
+</TD>
+
+<TD>
+<DIV ALIGN=right><IMG SRC="graphics/pez_addm.gif" NOSAVE HEIGHT=55 WIDTH=185></DIV>
+</TD>
+</TR>
+</TABLE>
+The Add Multiple option allows the user to add many poles or zeros without
+having to hit the Add buttons between locations. After clicking either
+the pole or zero button under Add Multiple, simply click the mouse in the
+complex Z-Plane for each pole or zero you wish to add. When done, click
+outside of the complex Z-Plane and the mouse cross hairs will return to
+a normal pointer. As with all add operations, the current multiplicity
+as applied for each new pole or zero.
+<BR>&nbsp;
+<BR>
+<HR WIDTH="100%">
+<TABLE BORDER=0 COLS=2 WIDTH="100%" >
+<TR>
+<TD>
+<H2>
+<A NAME="Add Double"></A>Add Double</H2>
+</TD>
+
+<TD>
+<DIV ALIGN=right><IMG SRC="graphics/pez_addd.gif" NOSAVE HEIGHT=82 WIDTH=190></DIV>
+</TD>
+</TR>
+</TABLE>
+The Add Double options allow users to add poles and zeros in pairs to explore
+properties of the unit circle. PeZ performs this mirroring symmetric the
+unit circle in terms of inverse radii (i.e., if you add a pole at radius
+r, it places its pair at 1/r).
+<BR>&nbsp;
+<BR>&nbsp;
+<CENTER><TABLE BORDER COLS=3 WIDTH="100%" >
+<TR>
+<TD>
+<CENTER>Add Double Pole(P-P)</CENTER>
+
+<CENTER>Add Double Zeros(Z-Z)</CENTER>
+</TD>
+
+<TD>These add options add a pair symmetric to the unit circle.&nbsp;</TD>
+
+<TD>
+<CENTER><IMG SRC="graphics/pez_doub.gif" NOSAVE HEIGHT=120 WIDTH=115></CENTER>
+</TD>
+</TR>
+
+<TR>
+<TD>
+<CENTER>Add Pole-Zero Pair(P-Z)</CENTER>
+</TD>
+
+<TD>This add option places a pole inside the unit circle, and its matching
+zero at an inverse radius outside of the unit circle. Fancy folk may call
+this an All-Pass filter.</TD>
+
+<TD>
+<CENTER><IMG SRC="graphics/pez_d_pz.gif" NOSAVE HEIGHT=118 WIDTH=104></CENTER>
+</TD>
+</TR>
+</TABLE></CENTER>
+&nbsp;
+
+<P>
+<HR WIDTH="100%">
+<TABLE BORDER=0 COLS=2 WIDTH="100%" >
+<TR>
+<TD>
+<H2>
+<A NAME="Deleting Poles/Zeros"></A>Deleting Poles/Zeros</H2>
+</TD>
+
+<TD>
+<DIV ALIGN=right><IMG SRC="graphics/pez_del.gif" NOSAVE HEIGHT=96 WIDTH=202></DIV>
+</TD>
+</TR>
+</TABLE>
+Pressing one of the delete buttons allows the user to remove poles and
+zeros from the Z-Plane. For both delete options, note that the current
+<A HREF="#Multiplicity">multiplicity</A> is applied. This means that if
+the multiplicity is set at 4, and the user selects a pole of multiplicity
+(weight) 10, PeZ will delete 4 instances of that pole, and set it to 6.
+<BR>&nbsp;
+<UL>
+<LI>
+<B>Select &amp; Delete:</B> This option is a one-shot delete. Press the
+button, then select the pole/zero to delete.</LI>
+
+<LI>
+<B>Select &amp; Delete Multiple:</B> This option allows the deleting of
+many poles/zeros, allowing the user to keep deleting until he or she clicks
+outside of the Z-Plane in the main PeZ window.</LI>
+</UL>
+&nbsp;
+
+<P>&nbsp;
+<HR WIDTH="100%">
+<CENTER><FONT SIZE=+2>[ <A HREF="index.htm">Intro</A> <A HREF="pez_func.htm">Functionality</A>
+<A HREF="pez_add.htm">Add/Delete</A> <A HREF="pez_edit.htm">Edit</A> <A HREF="pez_import.htm">Import</A>
+<A HREF="pez_export.htm">Export</A> ]</FONT></CENTER>
+
+<CENTER><FONT SIZE=+2></FONT></CENTER>
+
+<CENTER><FONT SIZE=+2><A HREF="pez_func.htm">&lt;&lt; Previous</A> <A HREF="pez_edit.htm">Next
+>></A></FONT></CENTER>
+&nbsp;
+<BR>&nbsp;
+</BODY>
+</HTML>

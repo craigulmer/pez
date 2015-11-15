@@ -1,7 +1,7 @@
 function pez_add(new,is_a_pole,weight)
 %
 %  pez_add(cartesian,is_a_pole) :: Root routine for pole or zero add
-%  for PeZ v3.0 last Rev June 10,1996  -- No Modifications without author's consent
+%  for PeZ v3.1beta last Rev 9/22/97  -- No Modifications without author's consent
 %  (type 'pez' in MATLAB to run)
 %  Craig Ulmer / GRiMACE@ee.gatech.edu
 
@@ -94,10 +94,10 @@ function pez_add(new,is_a_pole,weight)
               a_list(place,1)=new(1);
               a_list(place,2)=new(2);
               if is_a_pole
-                  a_list(place,3)=plot(new(1),new(2),'x','erasemode','background',...
+                  a_list(place,3)=plot(new(1),new(2),'x','erasemode','background','color','yellow',...
                       'ButtonDownFcn','global w_main_win;set(w_main_win,''WindowButtonUpFcn'',''pez_bin(''''moveup'''')'');pez_bin(''movedown_b'',gco);');
               else
-                  a_list(place,3)=plot(new(1),new(2),'o','erasemode','background',...
+                  a_list(place,3)=plot(new(1),new(2),'o','erasemode','background','color','yellow',...
                       'ButtonDownFcn','global w_main_win;set(w_main_win,''WindowButtonUpFcn'',''pez_bin(''''moveup'''')'');pez_bin(''movedown_b'',gco);');
               end;    
               a_list(place,4)=1;
@@ -112,7 +112,8 @@ function pez_add(new,is_a_pole,weight)
                   %-- new handle
                   a_list(place,4)=a_list(place,4)+t_weight; 
                   
-                  a_list(place,5)=text(a_list(place,1)+pez_fuz,a_list(place,2)+pez_fuz,num2str(a_list(place,4)),'erasemode','background',...
+                  a_list(place,5)=text(a_list(place,1)+pez_fuz,a_list(place,2)+pez_fuz,num2str(a_list(place,4)),...
+                      'erasemode','background','color','white',...
                       'ButtonDownFcn',['global w_main_win;',...
                       'set(w_main_win,''WindowButtonUpFcn'',''pez_bin(''''moveup'''')'');',...
                       'pez_bin(''movedown_b'' ,',num2str(a_list(place,3),32) ,');' ]);
