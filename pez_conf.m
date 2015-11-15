@@ -1,7 +1,7 @@
 function pez_conf(action,config_file_name)
 %
 %  pez_conf() :: Configuration window and loader
-%  for PeZ v3.1beta last Rev 9/22/97  -- No Modifications without author's consent
+%  for PeZ v3.1b last Rev 11/10/97  -- No Modifications without author's consent
 %  (type 'pez' in MATLAB to run)
 %  Craig Ulmer / GRiMACE@ee.gatech.edu
 
@@ -22,7 +22,7 @@ if strcmp(action,'edit_config'),
   
   if ( isempty(w_config) | ~any( get(0,'children') == w_config ))
         % Open up main control window
-        w_config = figure('resize','on','units','pixels','pos',[600 0 400 150],...
+        w_config = figure('resize','on','units','pixels','pos',[10 0 400 150],...
                   'numbertitle','off','name','PEZ v3.0 : Edit Configuration');
         
         pez_conf('load_basic');

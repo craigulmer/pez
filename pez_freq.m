@@ -1,7 +1,7 @@
 function hh = pez_freq(b,a,n,dum,Fs)
 %
 %  pez_freq()::Does Z-Plane freq response butchered from freqz()
-%  for PeZ v3.0beta last Rev May 20  -- No Modifications without author's consent
+%  for PeZ v3.0b last Rev 11/10/97  -- No Modifications without author's consent
 %  (type 'pez' in MATLAB to run)
 %  Craig Ulmer / GRiMACE@ee.gatech.edu
 

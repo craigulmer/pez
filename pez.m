@@ -1,12 +1,12 @@
 function pez(action,p_val,p_val2)
-%PeZ v3.1beta: A Pole-Zero Editor for MATLAB by Craig Ulmer / GRiMACE@ee.gatech.edu
+%PeZ v3.1b: A Pole-Zero Editor for MATLAB by Craig Ulmer / GRiMACE@ee.gatech.edu
 %No Modifications without the author's consent. See documentation for Legals.
 %
 %  See online help at:  http://www.ece.gatech.edu/users/grimace/pez/index.html
 %
 %Short: PeZ allows a user to graphically edit the poles and zeros for a
 %filter in the complex Z-Plane. To run, boot up MATLAB and type  pez.
-% Last Revision: 9/22/97
+% Last Revision: 11/10/97 
 
 %The following are for differences between v4 and v5
 global mat_version aspect_ratio_name fixed_aspect;
@@ -16,6 +16,8 @@ global weight ed_weight sli_weight mirror_x mirror_y del_weight del_values pez_p
 global fr_omega id_plot ui_text_line1 ui_text_line2 ui_text_line3 ui_text_line4 pez_fuz ed_change plot_ax pez_real_drag
 global pez_gain pez_angle_type pez_gain_ed pez_gain_sli pez_file_name pez_groupdelay pez_log w_config
 global pez_redraw_type pez_main_gids
+
+global pez_redraw_kludge pez_is_not_a_lame_pc
 
 if nargin<1,
      action='new';
@@ -43,6 +45,24 @@ if strcmp(action,'new'),
       pez_redraw_type='normal';
   else
       pez_redraw_type='xor';
+  end;
+
+  %Lamer PC's won't refresh right
+  if(strcmp(computer,'PCWIN') & (mat_version<5))
+     pez_redraw_kludge='refresh;rdraw;';
+     pez_is_not_a_lame_pc=0;
+  else
+     pez_is_not_a_lame_pc=1;
+     pez_redraw_kludge='refresh;';
+  end;
+
+  %Uninstalled grpdelay problems...
+  if((exist('grpdelay')==0) & (mat_version<5))
+    sprintf(['\nPez could not locate the function grpdelay. Please either install\n',...
+            'grpdelay or create a dummy file called grpdelay.m in this directory.\n',...
+            'The dummy file only needs to have this line in it:\n',...
+            '\nfunction grpdelay']),
+    return
   end;
 
   %-----------------------------------------------------------------------------
@@ -75,10 +95,16 @@ if strcmp(action,'new'),
 
    
   % Open up main control window
+  scr_units = get(0,'units'); set(0,'units','pixels');   %+++++ JMc 25-Oct-97
+  scr_pos = get(0,'screensize');
+  m_win_pos = [scr_pos(3)-820,10,800,465];
+  if( m_win_pos(1)<0 ),  m_win_pos = [scr_pos(3)-620,10,600,350]; end
+  if( m_win_pos(1)<0 ),  m_win_pos = [scr_pos(3)-420,10,400,232]; end
+  set(0,'units',scr_units);     %+++++++++++++++++++++++++++++ JMc 25-Oct-97
   w_main_win=figure('resize','on','units','pixels',...
                   'Pointer','watch',... 
-                  'pos',[400 0 800 465],...
-                  'numbertitle','off','name','PEZ v3.1 : Pole-Zero Control Window',...
+                  'pos',m_win_pos,...
+                  'numbertitle','off','name','PEZ v3.1b : Pole-Zero Control Window',...
                   'visible','off');
   
   pez_conf('load_default');
@@ -111,7 +137,7 @@ if strcmp(action,'new'),
                       'if argv==2, pez_bin(''kill_poles'');pez_plot(0);',...
                       'elseif argv==3, pez_bin(''kill_zeros'');pez_plot(0);',...
                       'elseif argv==4, pez_bin(''kill_zeros'');pez_bin(''kill_poles'');pez_plot(0); end;',...
-                      'global axes_zplane;axes(axes_zplane);refresh;']);
+                      'global axes_zplane pez_redraw_kludge;axes(axes_zplane);eval(pez_redraw_kludge);']);
 
   set(um_size,'call',['argv=get(gco,''val'');set(gco,''val'',1);',...
                       'if argv==2, pez(''size_supersmall'');',...
@@ -136,6 +162,7 @@ if strcmp(action,'new'),
   title('Z-Plane');
   xlabel('Real part')
   ylabel('Imaginary part')
+  drawnow       %----- JMc: force matlab to draw the z-plane (needed on Windows-95) ******
 
   % Set up the Info Box Frame
   uicontrol(w_main_win, 'style','frame','units','norm','pos',[ .47 .0 .52 .211],'backgroundcolor',c_infofr );
@@ -196,13 +223,16 @@ if strcmp(action,'new'),
   uicontrol(w_main_win, 'style','frame','units','norm','backgroundcolor',c_frameback,'pos', [ .47 .23 .52 .68]);
   
   % Set up a frame for Weight
-  uicontrol(w_main_win, 'style','frame','units','norm','backgroundcolor',c_frame,'pos', [ .50 .27 .22 .10]);
+  p=uicontrol(w_main_win, 'style','frame','units','norm','backgroundcolor',c_frame,'pos', [ .50 .27 .22 .10]);
+  PP=[PP p];
 
   % Set up a frame for Add buttons
-  uicontrol(w_main_win, 'style','frame','units','norm','backgroundcolor',c_frame,'pos', [ .50 .38 .22 .45]);
+  p=uicontrol(w_main_win, 'style','frame','units','norm','backgroundcolor',c_frame,'pos', [ .50 .38 .22 .45]);
+  PP=[PP p];
 
   % Set up a frame for Add Title
-  uicontrol(w_main_win, 'style','frame','units','norm','backgroundcolor',c_frame,'pos', [ .50 .82 .22 .05]);
+  p=uicontrol(w_main_win, 'style','frame','units','norm','backgroundcolor',c_frame,'pos', [ .50 .82 .22 .05]);
+  PP=[PP p];
   
   % Set up Add Title Text
   p=uicontrol(w_main_win,'style','text','units','norm','pos', [ .51 .825 .20 .04],...
@@ -240,12 +270,12 @@ if strcmp(action,'new'),
   PP=[PP p]; %Add to list of labels;
 
   
- % Set up text for Add Multiple
+ % Set up text for Add Multiple ** CHANGED TO  "ADD REPEATEDLY"
 
   p=uicontrol(w_main_win,'style','text','units','norm','pos', [ .51 .64 .20 .04],...
                        'backgroundcolor',c_frame,...
                        'foregroundcolor',[1 1 1],...
-                       'horizontalalignment','center','string','Add Multiple');
+                       'horizontalalignment','center','string','Add Repeatedly');
 
   PP=[PP p]; %Add to list of labels;
 
@@ -268,12 +298,12 @@ if strcmp(action,'new'),
 
   PP=[PP p]; %Add to list of labels;
 
-% Set up text for Add Double
+% Set up text for Add Double  ** CHANGED TO ADD QUAD GROUPS **
 
   p=uicontrol(w_main_win,'style','text','units','norm','pos', [ .51 .51 .20 .04],...
                        'backgroundcolor',c_frame,...
                        'foregroundcolor',[1 1 1],...
-                       'horizontalalignment','center','string','Add Double');
+                       'horizontalalignment','center','string','Add Quad Groups');
 
   PP=[PP p]; %Add to list of labels;
 
@@ -330,10 +360,12 @@ if strcmp(action,'new'),
 
  % ------------------------
  % Set up a frame for Move buttons
-  uicontrol(w_main_win, 'style','frame','units','norm','backgroundcolor',c_frame,'pos', [.73 .47 .24 .36]);
+  p=uicontrol(w_main_win, 'style','frame','units','norm','backgroundcolor',c_frame,'pos', [.73 .47 .24 .36]);
+  PP=[PP p];
    
   % Set up a frame for Move Title
-  uicontrol(w_main_win, 'style','frame','units','norm','backgroundcolor',c_frame,'pos', [ .73 .82 .24 .05]);
+  p=uicontrol(w_main_win, 'style','frame','units','norm','backgroundcolor',c_frame,'pos', [ .73 .82 .24 .05]);
+  PP=[PP p];
  
   % Set up Edit Title Text
   p=uicontrol(w_main_win,'style','text','units','norm','pos', [ .76 .825 .18 .04],...
@@ -343,7 +375,8 @@ if strcmp(action,'new'),
   PP=[PP p]; %Add to list of labels;
 
   % Set up a frame for Filter Gain
-  uicontrol(w_main_win, 'style','frame','units','norm','backgroundcolor',c_frame,'pos', [ .73 .61 .24 .12]);
+  p=uicontrol(w_main_win, 'style','frame','units','norm','backgroundcolor',c_frame,'pos', [ .73 .61 .24 .12]);
+  PP=[PP p];
 
       
   % Edit by Co-Ord   
@@ -391,10 +424,12 @@ if strcmp(action,'new'),
 
 %^^^^^^^^^^^^ DELETE ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                          
   % Set up a frame for Delete buttons
-  uicontrol(w_main_win, 'style','frame','units','norm','backgroundcolor',c_frame,'pos', [ .73 .27 .24 .14]);
+  p=uicontrol(w_main_win, 'style','frame','units','norm','backgroundcolor',c_frame,'pos', [ .73 .27 .24 .14]);
+  PP=[PP p];
  
   % Set up a frame for Delete Title
-  uicontrol(w_main_win, 'style','frame','units','norm','backgroundcolor',c_frame,'pos', [ .73 .41  .24 .05]);
+  p=uicontrol(w_main_win, 'style','frame','units','norm','backgroundcolor',c_frame,'pos', [ .73 .41  .24 .05]);
+  PP=[PP p];
  
   % Set up Add Title Text
   p=uicontrol(w_main_win,'style','text','units','norm','pos', [ .76 .415 .18 .04],...
@@ -542,7 +577,8 @@ if strcmp(action,'new'),
                     'pez(''restore_text'');',...
                     'pez(''show_main'');' ]);
  
-  set(ed_coord,'call',['set(',num2str(ed_1,32),',''visible'',''on'');',...
+  set(ed_coord,'call',['pez(''hide_main'');',...
+                    'set(',num2str(ed_1,32),',''visible'',''on'');',...
                     'set(',num2str(ed_2,32),',''visible'',''on'');',...
                     'set(',num2str(ed_3,32),',''visible'',''on'');',...
                     'set(',num2str(ed_4,32),',''visible'',''on'');',...
@@ -559,7 +595,8 @@ if strcmp(action,'new'),
                     'set(',num2str(ed_mag,32),',''visible'',''on'');',...
                     'set(',num2str(ed_angle,32),',''visible'',''on'');',...
                     'set(',num2str(ed_13,32),',''visible'',''on'');',...
-                    'pez(''info_edco'');']);
+                    'pez(''info_edco'');',...
+                    'rdraw;']);
  
 
 
@@ -723,7 +760,7 @@ if strcmp(action,'new'),
                          'end;' ];
                          
 
-    import_call= ['pez(''hide_main'');',...
+    import_call= [ 'pez(''hide_main'');',...
                           'set(',num2str(ie_0,32),',''visible'',''on'');',...
                           'set(',num2str(ie_1,32),',''visible'',''on'',''string'',''Import / Add Options'');',...
                           'set(',num2str(ie_3,32),',''visible'',''on'',''val'',1);',...
@@ -739,7 +776,8 @@ if strcmp(action,'new'),
                           'set(',num2str(ie_15,32),',''visible'',''off'');',...
                           'set(',num2str(ie_16,32),',''visible'',''on'');',...
                           'set(',num2str(ie_17,32),',''visible'',''off'');',...
-                          'pez(''info_import_add'');'];
+                          'pez(''info_import_add'');',...
+                          'rdraw;'];
 
     export_call= ['pez(''hide_main'');',...
                           'set(',num2str(ie_0,32),',''visible'',''on'');',...
@@ -757,7 +795,8 @@ if strcmp(action,'new'),
                           'set(',num2str(ie_13,32),',''visible'',''on'');',...
                           'set(',num2str(ie_14,32),',''visible'',''on'');',...
                           'set(',num2str(ie_16,32),',''visible'',''on'');',...
-                          'pez(''info_export'');'];
+                          'pez(''info_export'');',...
+                          'rdraw;'];
     
     
     % Do Import Selector Call
@@ -798,6 +837,7 @@ elseif strcmp(action,'hide_main'),
 %============
 elseif strcmp(action,'show_main'),
   set(pez_main_gids,'visible','on');
+  rdraw;
 
 %============
 elseif strcmp(action,'new_filename'),
@@ -816,6 +856,16 @@ elseif strcmp(action,'new_filename'),
 %============
 elseif strcmp(action,'get_filtdemo'),
 
+  %For econo-users without filtdemo. If Matlab cannot resolve functions,
+  %even if they are not used, it halts. 
+  if(exist('filtdemo'))
+     filt_execute=['[b_tmp_erase_me, a_tmp_erase_me]=filtdemo(''getfilt'');',...
+                   'pzimport(b_tmp_erase_me, a_tmp_erase_me);'];
+  else,
+     filt_execute='sprintf(''Filtdemo not found in current path.''),';
+  end; 
+
+
   % This Code finds out if filtdemo is actually running and grabs info
   
   k=get(0,'children');
@@ -828,8 +878,7 @@ elseif strcmp(action,'get_filtdemo'),
   
   if (l<length(k))
      figure(k(l));
-     [b,a]=filtdemo('getfilt');
-     pez_import(b,a); 
+     eval(filt_execute); %sigh
   else
      sprintf('Pez unable to find running ''filtdemo'' program.'),
   end;        
@@ -859,7 +908,7 @@ elseif strcmp(action,'do_import'),
       
       pez_gain_tmp=str2num( get(p_val(6),'string') );
 
-      pez_import(pez_new_z,pez_new_p, pez_gain_tmp, 1);         
+      pzimport(pez_new_z,pez_new_p, pez_gain_tmp, 1);         
 
 %============
 elseif strcmp(action,'do_import_ba'),
@@ -867,7 +916,7 @@ elseif strcmp(action,'do_import_ba'),
       eval_str=get(p_val(1),'string');
       sprintf(['[B,A]=',eval_str]),
       [b,a]= eval( eval_str );
-      pez_import(b,a);
+      pzimport(b,a);
 
 %============
 elseif strcmp(action,'do_export'),
@@ -1141,7 +1190,7 @@ elseif  strcmp(action,'hide_me')
 %---------
 elseif  strcmp(action,'restore_text')
 
- set(ui_text_line1,'horizontalalignment','center','string','Welcome to PEZ 3.1: A Pole Zero Editor');
+ set(ui_text_line1,'horizontalalignment','center','string','Welcome to PEZ 3.1b: A Pole Zero Editor');
  set(ui_text_line2,'horizontalalignment','center','string','EE 2200');
  set(ui_text_line3,'horizontalalignment','center','string','Georgia Institute of Technology');
  set(ui_text_line4,'horizontalalignment','center','string','Comments & Abuse: Grimace@ee.gatech.edu');

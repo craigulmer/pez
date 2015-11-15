@@ -1,7 +1,7 @@
 function pez_move(action,is_a_pole)
 %
 %  pez_move():: Hard code for moving poles/zeros about
-%  for PeZ v3.1beta last Rev 9/22/97  -- No Modifications without author's consent
+%  for PeZ v3.1b last Rev 11/10/97  -- No Modifications without author's consent
 %  (type 'pez' in MATLAB to run)
 %  Craig Ulmer / GRiMACE@ee.gatech.edu
 
@@ -140,9 +140,12 @@ elseif strcmp(action,'finalize')
     if (mirror_y&move_x_val), pez_add([-move_x_val move_y_val], is_a_pole, the_weight); end;
     if (mirror_x&mirror_y&(move_x_val*move_y_val)), pez_add([-move_x_val -move_y_val],is_a_pole, the_weight); end;
 
-    pez_plot(0);  
+    pez_plot(0);
+
+    global pez_redraw_kludge;
     axes(axes_zplane);
-    refresh;
+    eval(pez_redraw_kludge);
+    %refresh;
 
 
 
