@@ -1,7 +1,9 @@
 function pez_del(del_place,is_a_pole)
-% ===================================
-%  Handle the Delete Zero Core  'delzcore' call
-%elseif strcmp(action,'delzcore')
+%
+%  pez_del(place_#,is_a_pole) :: Root routine for deleting pole or zero
+%  for PeZ v2.8b last Rev Feb 25  -- No Modifications without author's consent
+%  (type 'pez' in MATLAB to run)
+%  Craig Ulmer / GRiMACE@ee.gatech.edu
 
   global weight p_list z_list num_poles num_zeros num_diff_poles num_diff_zeros
     

@@ -1,4 +1,17 @@
 function pez_config(action,config_file_name)
+%
+%  pez_config() :: Holds basic configuration. Not finished yet.
+%  for PeZ v2.8b last Rev Feb 25  -- No Modifications without author's consent
+%  (type 'pez' in MATLAB to run)
+%  Craig Ulmer / GRiMACE@ee.gatech.edu
+
+% change here for whether or not to plot log magnitudes
+global pez_log;
+if ~(length(pez_log))
+   pez_log=0;  %0=not log mag plots, 1=log mag plots
+end;
+
+
 
 global mirror_x mirror_y precision fr_omega frs_omega w_main_win id_plot w_config plot_theta
 

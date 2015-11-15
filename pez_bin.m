@@ -1,16 +1,16 @@
 function pez_bin(action,p_val)
-
-% -- Craig Ulmer / gt7667a@prism.gatech.edu / gt7667a@eecom.gaetch.edu / ulmer@eedsp.gatech.edu
 %
-% Actions :  'new'
-%            'options'
+%  pez_bin() :: Bulk of decode action routines. Zscale, Add Mirrors,etc
+%  for PeZ v2.8b last Rev Feb 25  -- No Modifications without author's consent
+%  (type 'pez' in MATLAB to run)
+%  Craig Ulmer / GRiMACE@ee.gatech.edu
 
 global ed_scale sli_scale p_list z_list num_poles num_zeros z_axis w_main_win axes_zplane place num_diff_poles num_diff_zeros
 global weight ed_weight sli_weight new mirror_x mirror_y del_place del_x del_y pz z_axis x_val y_val 
 global precision dp move_x_val move_y_val move_type move_place move_handle move_num_handle drag_move 
 global ed_real ed_imag ed_mag ed_angle edit_type fr_omega id_plot pez_fuz 
 global str_p_1 str_p_2 str_p_3 str_p_4 str_z_1 str_z_2 str_z_3 str_z_4 str_handle_1 str_handle_2 str_handle_3 str_handle_4 str_ending str_do_plot
-global ui_text_line1 ui_text_line2 ui_text_line3 ui_text_line4 ed_change
+global ui_text_line1 ui_text_line2 ui_text_line3 ui_text_line4 ed_change pez_gain
 
 if nargin<1,
      action='new';
@@ -31,6 +31,7 @@ if strcmp(action,'rzaxis')
           z_axis=p_val;
           axes(axes_zplane);
           axis([-z_axis z_axis -z_axis z_axis]);
+          pez_plot(0);
        end,
        set(ed_scale,'string',num2str(z_axis));
        set(sli_scale,'val',z_axis);
@@ -139,9 +140,7 @@ elseif strcmp(action,'adddp')
         k=[new(1,1)+new(1,2)*j];
         r=abs(k);
         theta=angle(k);
-        dis=1-r;
-        r=r+2*dis;
-        k=r*exp(j*theta);
+        k=(1/r)*exp(j*theta);
         new(1,1)=real(k);
         new(1,2)=imag(k);
         pez_bin('addmirrorp');
@@ -225,9 +224,7 @@ elseif strcmp(action,'adddz')
        k=[new(1,1)+new(1,2)*j];
        r=abs(k);
        theta=angle(k);
-       dis=1-r;
-       r=r+2*dis;
-       k=r*exp(j*theta);
+       k=(1/r)*exp(j*theta);
        new(1,1)=real(k);
        new(1,2)=imag(k);
        pez_bin('addmirrorz');
@@ -251,21 +248,18 @@ elseif strcmp(action,'adddpz')
       k=[new_orig(1,1)+new_orig(1,2)*j];
       r=abs(k);
       theta=angle(k);
-      dis=1-r;
-      r=r+2*dis;
-      k=r*exp(j*theta);
-      new_comp(1,1)=real(k);
-      new_comp(1,2)=imag(k);
+      new_comp(1,1)=real((1/r)*exp(j*theta));
+      new_comp(1,2)=imag((1/r)*exp(j*theta));
       if (r>1)             % true then original click inside circle          
          new=new_orig;
-         pez_bin('addmirrorp');
-         new=new_comp;
          pez_bin('addmirrorz');
+         new=new_comp;
+         pez_bin('addmirrorp');
       else                      % original click outside circle
          new=new_comp;
-         pez_bin('addmirrorp');
-         new=new_orig;
          pez_bin('addmirrorz');
+         new=new_orig;
+         pez_bin('addmirrorp');
       end;
 
       pez_plot(0);  % -- Do a new plot  
@@ -688,6 +682,8 @@ elseif strcmp(action,'moveup')
                  
 end;
 
+    axes(axes_zplane);
+    refresh;
     pez('restore_text');
     pez_plot(0);  % -- Do a new plot   
 
@@ -865,6 +861,7 @@ elseif strcmp(action,'kill_zeros')
       delete(z_list(find(z_list(:,5)),5))
     end;
     
+    pez_gain=1;
     z_list=[];
     num_zeros=0;
     num_diff_zeros=0;
@@ -1000,3 +997,4 @@ elseif strcmp(action,'init_strings')
 %  Handle the OPTIONS event  
 elseif strcmp(action,'options'),  
 end
+

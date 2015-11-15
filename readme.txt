@@ -1,220 +1,49 @@
--/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
+This is a beta version of Pez 2.8.  Use this at your own risk!
+Author: Craig Ulmer grimace@ee.gatech.edu (or gt7667a@prism.gatech.edu)
+February 26,1996
+
+Important: If you haven't used pez before, I suggest getting pez 2.7 and
+reading the documentation first. This release is mainly for people who
+wanted a few extra features.
+
+All source code and information is released for use without
+modifications or profit redistributions, as stated in the previous
+release, found in pez27.zip at
+
+http:/www.ece.gatech.edu/users/grimace/www/pez/index.html
+
+The documentation has not been updated yet, but the previous version's
+should be adequate(As well as found  at the above address).
+
+Note: At the request of several people, an import option has been added
+to pez. Right now it is a command line version(from matlab). To access
+it,  - startup Matlab
+	 - startup pez28  by typing pez
+	 - type  help pez_import  in the Matlab window
 
 
-            ################     ################   ################
-                         #####                               
-                         #####   #####                      ######   
-                         #####   #####                    ######
-            ################     ###########            ######   
-            #####                #####                 ###### 
-            #####                #####               ###### 
-            #####                ################   ################
+This is the beta version of Pez 2.8b (Feb 25)
+Changes:
+- Added the dB button to mag plots
+- Now clips dB at -140(With better scaling)
+- Changed log-mag to  0 to pi, added grid
+- Fixed import bug (Plotted to wrong window if 2 tries of same data)
+- Added quick move stuff (ie, xor on move object)
+- Added Gain to import (Is this right??)
+- Cleaned up a few nic-nacks
+
+pez 2.8a (Feb 11)
+Changes: 
+- Added a pez_import function for command line adding
+- Fixed a bug with the adding at imag=0 results in shift, even if not at
+	origin
+- Fixed up the adding at origin. Now handles the (hopefully) right
+	amount of e^jwn multiplication for the phase response
+- Added the basic code for changing between magnitude of freq
+	response and 20*log10(freq_response). No button yet, but you can
+	change back and forth by typing on the command line
 
 
 
-		    A Graphical Pole Zero Editor for Matlab
-
-				      v2.7
-
-				       by
-		      Craig Ulmer / Grimace@ee.gatech.edu
-		      
-		 [  http://www.ece.gatech.edu/users/grimace  ]
-		 
-				January 14, 1996
-				
--/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
-
-Welcome to PeZ, a Pole Zero Editor.  This zip file contains all of the files
-you should need to get PeZ up and running on your graphical Matlab system.
-
-What it is
-~~~~~~~~~~
-PeZ is a bit of Matlab code that builds a Graphical User Interface for you
-to interact with the Z-Plane. Since Matlab code is a run-time interpreted
-language(at least in 4.2), the unique feature of PeZ is that it can 
-be run from just about any platform that runs a graphical version of 
-Matlab.  PeZ allows you to graphically add poles and zeros to the Z-Plane,
-then lets you shift and modify the pole/zero locations while showing you
-the real-time frequency response.
-
-Application
-~~~~~~~~~~~
-PeZ was built to help teach basic signal processing techniques to 
-Sophomore-Senior level students. While PeZ has lost a lot of its
-blocky-hard-to-use-look, it still has the basic power that higher
-I-need-something-blocky-&-hard-to-use people require. 
-
-Features:
- - Different forms of Adding/Deleting/Moving
- - Adds symmetric to the unit circle
- - Real-Imaginary / Magnitude-Phase editing
- - Save/Load to file
- - Export to Roots or Polynomial Equation Vectors
- - Print to File, PS, EPS, or GIF
- - (!!)REAL TIME drag pole/zero and update plots option(!!)
- - (Somewhat) Handles poles/zeros at origin that freqz() chokes on(see below)
- - Runs on just about anything in reason
- - It's more or less free!(See the legal blurb)
- 
-Shameless Plug
-~~~~~~~~~~~~~~
-If all goes right, PeZ is expected to be packaged with an upcoming 
-Book/CD-Rom package written by Dr. Schafer and Dr. McClellan at the
-Georgia Institute of Technology.  The CD-Rom should contain DSP
-material written in hyper-text HTML, and is being tested, like PeZ,
-on Georgia Tech's own EE2200 class.  If you or your school
-is interested in using new technology to better teach students,
-please contact the author or check out the web page listed below.
-
-Real Documentation
-~~~~~~~~~~~~~~~~~~
-In this archive is a file called "docs.zip". This contains a copy of
-the documentation for PeZ in HTML format.  To view these files,
-unzip docs.zip (with the directory option on..-d in pkzip). Inside the
-docs/Demos directory should be a few html documents.  Boot up a
-web browser and open the file /docs/Demos/index.html.
-
-Being that there's something bound to go wrong among the different 
-systems this can be run off of, the documentation can be found on the
-World-Wide-Web at http://www.ece.gatech.edu/users/grimace/pez/Demos/index.html.
-
-The Big System Question
-~~~~~~~~~~~~~~~~~~~~~~~
-The big question is "Will it actually work on my system?". The short
-answer is "more-or-less".  A fair amount of time was spent writing the
-Matlab code so that it was more "friendly" towards different systems.
-Here at Georgia Tech, we're running the code on HP 712/60MHz workstations
-with reasonably large monitors.  Screen real estate is usually the big kicker-
-since we have reasonably large monitors here, we can afford to let 
-our application windows get kind of big(say 700x400 pixels). Anticipating
-that I'd want to run this at home on my own PC, I wrote the code so
-that all of the windows and gadgets are relative. SO, is the window that
-comes up is too small, just resize it down to an appropriate size.
-
-As far as speed, I was actually impressed with my PC at home: even with
-the more complex operations, my 486dx4-100 was able to keep up with it.
-I've seen similar results on the MACs around here, but I should be testing
-compatibilities out more this quarter.
-
-Poles / Zeros at Origin
-~~~~~~~~~~~~~~~~~~~~~~
-One point that I will admit in advance is a little less than desirable
-is the way PeZ (and Matlab for that matter) handle poles and zeros at
-the origin. If you yourself place poles/zeros at the origin, it should
-have the effect of shifting the impulse response as a delay(left or 
-right).  The shift should have no effect on the magnitude of the 
-frequency response, but should adjust the phase response by a corresponding
-exponential.  Calls to freqz() don't acknowledge this, so I had to
-rewrite freqz() to fit my needs.  While the impulse response is affected,
-the phase response has not yet been modified in the code. This is also
-partly due to the next problem.
-
-There is an issue of "implied poles/zeros" that PeZ at the current time
-ignores. An implied pole or zero means that there are additional poles
-or zeros added to the origin for each pole or zero you add elsewhere,
-simply due to notation. If you added a zero at A, you could have
-either
-                H1(z) = z-A    or  H2(z) = (1 - A*z^-1)
-
-Both mean more or less the same thing, it's just that you divided
-H1(z) by z to get H2(z).  However to be technical, they differ
-because H2(z) has an additional pole at z=0, since 0^-1 blows up.
-This implied pole has no other effect on the system, but is definately
-a problem if you were to code the system and pretend it was not there.
-
-PeZ currently does not display implied poles or zeros since they don't
-make changes to any of the responses being measured.  I expect to 
-do a bit of rework o this later, but for now, you'll have to live with
-a little bit of hand waving.
-
-A Word About this Release
-~~~~~~~~~~~~~~~~~~~~~~~~~
-I am releasing this to get a feeling of whether this program is useful to 
-other people. I would appreciate hearing back what you think of the
-program, what you would like seen done. Being a graduate student with
-other responsibilities, I can't guarantee that everything or anything will
-work with PeZ, but hopefully this will spawn some more creative thoughts
-on the subject.
-
-Getting a hold of me
-~~~~~~~~~~~~~~~~~~~~
-Please feel to send me mail or look around at some of my other activities.
-I can be reached at:
-
-  Craig Ulmer                        email: grimace@ee.gatech.edu
-  327667 Georgia Tech Station               ulmer@eedsp.gatech.edu
-  Atlanta, GA  30332-1175                   gt7667a@prism.gatech.edu
-  
-      Web:  http://www.ece.gatech.edu/users/grimace
-  
-Legal Notes(Important!)
-~~~~~~~~~~~~~~~~~~~~~~~
-Permission is granted to anyone to make or distribute verbatum copies of
-this software package and documentation in any medium, under the following
-conditions:
-
-- It is not to be sold or distributed in any other form but this(No Mutations).
-- If you want to include PeZ with your own product distribution(ie, include
-    it on a CD-Rom with other software), you must get the written permission
-    from the author, Craig Ulmer.
-- If your school would like to use PeZ as a tool at your school, company,
-    university, or institute, you MUST mail the author an extra-large
-    T-Shirt or sweatshirt depicting your school! Have a little pride.. :)
-    
-Thanks Again To
-~~~~~~~~~~~~~~~
-Thanks must go to the following, whom without this project would not be 
-possible:
-
- - Dr. Schafer   -- Thanks for the publicity, as well as all of the help
-                    and direction in getting this thing done.
- - Dr. McClellan -- Thanks for hammering vectorization into me..Now I can't
-                    write anything in C without trying to make it parallel. :)
- - Dr. Yoder     -- Thanks for always thinking of new and better ways to do
-                    things and teach others.
- - Jeff Schodorf -- Thanks for getting on my case all of the time!
- - Amer Abufadel -- Thanks for all the diversions we came up with to avoid
-                    getting the work done earlier!
-          
-
-Files you should have in this archive:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
--------------------------------------------------------------------------------
-docs.zip     53291  -- Documentation in HTML format
-
-pez.m        32660  -- Main program
-pez_add.m     4720
-pez_bin.m    39439
-pez_config.m  5713
-pez_del.m     2100
-pez_exp.m      518
-pez_freq.m     461
-pez_is_hit.m   885
-pez_plot.m    3387
-
-readme.txt          -- this file   
--------------------------------------------------------------------------------
--/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
-
-Changes in v2.7
-~~~~~~~~~~~~~~~
-- First official Release
-- Now has some documentation! Written in HTML, should be a little bit
-          better than previous one-line-ascii I've had.
-- Redefined Edit options - Now they're on a separate menu for easier use
-- All help stuff completed
-- Better object selection (chooses object closest in area to click)
-- Better Real adds (If close to the real axis, assumes no imaginary portion)
-- Faster real time moves
-- Internalized all plot functions (ie, no calls to freqz(), should Fix
-          Dr. Schafer's previous troubles).
-- Removed all uicontrol() calls due to instabilities of Matlab (replaced
-          with my own drop menus)
-- Resized window co-ordinates (ie, made about 100 changes in window variables
-          about 3 or 4 different times)
-- Added Print to PS,EPS,and GIF due to popular demand
-- Split up some of the big functions into little functions for speed
-- Figured out how to spell "Zeros"
-- And...Lots of other things too tedious to remember
-
+More to come...
+-Craig
