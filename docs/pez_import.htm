@@ -1,0 +1,213 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.03 [en] (X11; I; HP-UX B.10.20 9000/770) [Netscape]">
+</HEAD>
+<BODY>
+
+<H1>
+Import Options</H1>
+
+
+<P>PeZ has a number of methods of communicating with the Matlab environment.
+This communication allows users to better prod the filter data as well
+as save the data for later use.
+
+<P>To get to the Import Options, select the Import Filter Data button from
+the main window:
+<CENTER><IMG SRC="graphics/pez_ie.gif" NOSAVE HEIGHT=72 WIDTH=199></CENTER>
+&nbsp;
+<BR>Selecting the Import Filter Data will set up a number of import options
+for the user to choose from. The default import option is to Import from
+Simple Data Values. There are currently four methods of importing: <A HREF="#Importing Simple Data">Data
+Values</A>, <A HREF="#Importing from File">File</A>, <A HREF="#Import [B,A]">[B,A]=</A>,
+and <A HREF="#Grab Filtdemo">Grab Filtdemo</A>.
+<BR>&nbsp;
+<BR>There is also a Matlab <A HREF="#Command Line Import">command line
+function</A> for importing into pez.
+<BR>&nbsp;
+
+<P>
+<HR WIDTH="100%">
+<H2>
+&nbsp;<A NAME="Importing Simple Data"></A>Importing Simple Data Values</H2>
+The simplest way to add values is to give the filter array coefficients.
+The Import Values options appear as:
+<CENTER><IMG SRC="graphics/pez_impo.gif" NOSAVE HEIGHT=326 WIDTH=430></CENTER>
+&nbsp;
+<BR>&nbsp;
+<BR>&nbsp;
+<UL>
+<LI>
+<B>Pole/Zero Values:</B> These values are the coefficients for the filter.</LI>
+</UL>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Note:
+These values may be regular Matlab expressions to an extent, for example,
+select roots and enter:
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Pole Values:&nbsp;&nbsp; <TT>cos(linspace(-pi,pi,5))+j*sin(linspace(-pi,pi,5))</TT>
+<UL>
+<LI>
+<A NAME="Poly"></A><B>Poly</B> refers to polynomials. This means you wish
+to enter the coefficients of the polynomial equation.</LI>
+</UL>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Example:&nbsp;
+5*x(n) + 3*x(n-1) + 1*x(n-2) ==> [5 3 1]
+<UL>
+<LI>
+<B>Roots</B> refers to the roots of the polynomial. These are generally
+more accurate than polynomials.</LI>
+</UL>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Example:
+x(n) - 3x(n-1) + 2x(n-2) = (x(z)-1)(x(z)-2) ==> [1 2]
+<BR>&nbsp;
+<BR>&nbsp;
+
+<P>
+<HR WIDTH="100%">
+<H2>
+<A NAME="Importing from File"></A>Importing from File</H2>
+The import from file option allows the user to load a Matlab file containing
+filter coefficients. Selecting this option sets the display to the following:
+<CENTER><IMG SRC="graphics/pez_ifil.gif" NOSAVE HEIGHT=327 WIDTH=425></CENTER>
+&nbsp;
+<UL>
+<LI>
+<B>File</B>: This button selects the Matlab (.mat) data file to extract
+the filter data from.</LI>
+
+<LI>
+<B>Pole/Zero Variable Name:</B> These are the variable names used in the
+data file to store the filter.</LI>
+
+<LI>
+<B>Poly/Roots:</B> These determine whether the filter data arrays are Polynomials
+or Roots. See <A HREF="#Poly">above</A>.</LI>
+
+<LI>
+<B>Filter Gain:</B> Sets what the numerical gain of this filter is. Since
+any imports are seen as cascading of filters, this will have the effect
+of multiplying the overall gain of the filter.</LI>
+
+<LI>
+<B>Load from File:</B> This executes the actual load. If there are problems,
+errors will appear in the Matlab window.</LI>
+</UL>
+<B>Note: Matlab 4.2 and Matlab 5.x data files are not the same! </B>I believe
+you can load the 4.2 files with 5.0, but not vice versa.
+<BR>
+<HR WIDTH="100%">
+<H2>
+<A NAME="Import [B,A]"></A>Import [B,A]=</H2>
+Since there are a number of filter commands in Matlab that return filter
+coefficients in the form of [B,A], PeZ can import the results right into
+the system. What PeZ does is make the call exactly as the user types it,
+and tries to import the result straight into PeZ. The display appears as:
+<CENTER><IMG SRC="graphics/pez_iba.gif" NOSAVE HEIGHT=326 WIDTH=424></CENTER>
+
+<CENTER>&nbsp;</CENTER>
+
+
+<P>Example of what to place in the entry box:
+<CENTER><TT>[B,A] = butter( 5, 0.5, 'high' )</TT></CENTER>
+
+
+<P>This will import a 5th order highpass Butterworth filter with cutoff
+at pi/2.
+
+<P>
+<HR WIDTH="100%">
+<H2>
+<A NAME="Grab Filtdemo"></A>Grab Filtdemo</H2>
+Probably one of the most interesting things about PeZ is that it can interact
+with other Matlab programs. There is a tool called 'filtdemo' that allows
+users to graphically create different types of filters based on response.
+Choosing the Grab Filtdemo in the import options of PeZ allows PeZ to examine
+Filtdemo and grab its current filter. This can all be done by:
+<BR>&nbsp;
+<UL>
+<LI>
+Start Matlab</LI>
+
+<LI>
+Start PeZ by typing pez</LI>
+
+<LI>
+Start Filtdemo by typing filtdemo</LI>
+
+<LI>
+Design a filter in filtdemo</LI>
+
+<LI>
+Go to PeZ and select the Grab Filtdemo from the Import Options</LI>
+
+<LI>
+Manipulate the filter in PeZ and see what happens when you good up the
+poles and zeros.</LI>
+</UL>
+Currently there is no easy way to send the filter back to filtdemo, but
+then again, there's not much point.
+
+<P>&nbsp;
+<BR>
+<HR WIDTH="100%">
+<H2>
+<A NAME="Command Line Import"></A>Command Line Import</H2>
+PeZ also allows users to import filter data through a Matlab command line
+program. The function is called <B>pez_import</B> and has the following
+format:
+<BR>&nbsp;
+<BR>&nbsp;
+<CENTER><TABLE BORDER NOSAVE >
+<TR NOSAVE>
+<TD NOSAVE><TT>pez_import(B,A,GAIN,are_roots)</TT>&nbsp;
+<TABLE BORDER NOSAVE >
+<TR NOSAVE>
+<TD NOSAVE><TT>B</TT>&nbsp;
+<BR><TT>A</TT>&nbsp;
+<BR><TT>GAIN</TT>&nbsp;
+<BR><TT>are_roots</TT></TD>
+
+<TD><TT>Zeros Coefficient Vector</TT>&nbsp;
+<BR><TT>Poles Coefficient Vector</TT>&nbsp;
+<BR><TT>This Filter's Gain</TT>&nbsp;
+<BR><TT>0=B,A are Polynomials(Default)</TT>&nbsp;
+<BR><TT>1=B,A are Roots</TT></TD>
+</TR>
+</TABLE>
+&nbsp;</TD>
+</TR>
+</TABLE></CENTER>
+&nbsp;
+<BR>Examples:
+<BR>&nbsp;
+<CENTER><TABLE BORDER NOSAVE >
+<TR>
+<TD><TT>>> pez_import(B,A)</TT>
+<BR><TT>>> pez_import(B)</TT>
+<BR><TT>>> pez_import(B,A,5)</TT>
+<BR><TT>>> pez_import(B_root,A_root,8,1)&nbsp;</TT></TD>
+
+<TD><TT>Imports polynomials, gain of B(1)</TT>
+<BR><TT>Imports polynomial Zero vector, gain of B(1)</TT>
+<BR><TT>Imports polynomials with gain of 5(Ignores B(1))</TT>
+<BR><TT>Imports root vectors, gain of 8</TT></TD>
+</TR>
+</TABLE></CENTER>
+&nbsp;
+
+<P>
+<HR WIDTH="100%">
+<CENTER><FONT SIZE=+2>[ <A HREF="index.htm">Intro</A> <A HREF="pez_func.htm">Functionality</A>
+<A HREF="pez_add.htm">Add/Delete</A> <A HREF="pez_edit.htm">Edit</A> <A HREF="pez_import.htm">Import</A>
+<A HREF="pez_export.htm">Export</A> ]</FONT></CENTER>
+
+<CENTER><FONT SIZE=+2><A HREF="pez_edit.htm">&lt;&lt; Previous</A> <A HREF="pez_export.htm">Next
+>></A></FONT></CENTER>
+
+<CENTER>&nbsp;</CENTER>
+
+<CENTER>&nbsp;</CENTER>
+&nbsp;
+</BODY>
+</HTML>

@@ -1,7 +1,7 @@
 function pez_bin(action,p_val)
 %
 %  pez_bin() :: Bulk of decode action routines. Zscale, Add Mirrors,etc
-%  for PeZ v3.0 last rev June 10,1996  -- No Modifications without author's consent
+%  for PeZ v3.1beta last Rev 9/22/97  -- No Modifications without author's consent
 %  (type 'pez' in MATLAB to run)
 %  Craig Ulmer / GRiMACE@ee.gatech.edu
 
@@ -35,6 +35,7 @@ if strcmp(action,'rzaxis')
        set(sli_scale,'val',z_axis);
        
        pez_fuz=2*z_axis/80;
+       pez_plot(0);
 
 % ===================================
 %  Handle the RESET WEIGHT or 'rweight' call
@@ -64,11 +65,14 @@ elseif strcmp(action,'rgain')
        if (p_val),  p_val=get(pez_gain_sli,'val');
        else,        p_val=str2num(get(pez_gain_ed,'string'));end;
 
+    % Figure out direction
+    %   if (p_val>pez_gain), p_val=ceil(p_val);
+    %   elseif (p_val<pez_gain), p_val=floor(p_val); end;
        
     % Determine if in range
-       if (p_val>=0) & (p_val<=100), pez_gain=p_val;
-       elseif            (p_val<0), pez_gain=0;
-       else,                        pez_gain=100;   end;
+       if (p_val>=0) & (p_val<=30), pez_gain=p_val;
+       elseif            (p_val<1), pez_gain=0;
+       else,                        pez_gain=30;   end;
         
        set(pez_gain_ed,'string',num2str(pez_gain));
        set(pez_gain_sli,'val',pez_gain);
@@ -103,7 +107,9 @@ elseif strcmp(action,'addmirrorp')
         pez_new_point= -pez_new_point;
         pez_add(pez_new_point,1,weight);
         pez_new_point= -pez_new_point;
-    end;    
+    end;  
+
+    refresh; %Otherwise ginput doesn't get cursor  
  
 % ===================================
 %  Handle the ADD Single POLE or 'addsp' call
@@ -146,17 +152,13 @@ elseif strcmp(action,'adddp')
     pez_new_point = ginput(1);  
     if ( ~any(abs(pez_new_point)>z_axis) )
         pez_bin('addmirrorp');
-        xorigtmp=round(pez_new_point*pez_precision)/pez_precision;
-
         k=[pez_new_point(1,1)+pez_new_point(1,2)*j];
         r=abs(k);
         theta=angle(k);
         k=(1/r)*exp(j*theta);
         pez_new_point(1,1)=real(k);
         pez_new_point(1,2)=imag(k);
-        
-        xtmp=round(pez_new_point*pez_precision)/pez_precision;
-        if(xorigtmp~=xtmp),pez_bin('addmirrorp');end;
+        pez_bin('addmirrorp');
 
         pez_plot(0);  % -- Do a pez_new_point plot 
     end;      
@@ -192,7 +194,9 @@ elseif strcmp(action,'addmirrorz')
            pez_add(pez_new_point,0,weight);
            pez_new_point= -pez_new_point;
     end; 
-      
+  
+    refresh; %Otherwise ginput doesn't get cursor  
+    
 % ===================================
 %  Handle the ADD Single ZERO or 'addsz' call
 elseif strcmp(action,'addsz')
@@ -234,17 +238,13 @@ elseif strcmp(action,'adddz')
     pez_new_point = ginput(1);
     if ( ~any(abs(pez_new_point)>z_axis) )
        pez_bin('addmirrorz');
-       xorigtmp=round(pez_new_point*pez_precision)/pez_precision;
-      
        k=[pez_new_point(1,1)+pez_new_point(1,2)*j];
        r=abs(k);
        theta=angle(k);
        k=(1/r)*exp(j*theta);
        pez_new_point(1,1)=real(k);
        pez_new_point(1,2)=imag(k);
-      
-       xtmp=round(pez_new_point*pez_precision)/pez_precision;
-       if(xtmp~=xorigtmp),pez_bin('addmirrorz');end;
+       pez_bin('addmirrorz');
        pez_plot(0);  % -- Do a pez_new_point plot   
     end;
     pez('restore_text');
@@ -364,6 +364,7 @@ elseif strcmp(action,'delexecute')
     end;      
  end;
   
+  refresh; %Otherwise ginput doesn't get cursor  
   pez_plot(0);
 
 % ===================================
@@ -484,6 +485,8 @@ elseif strcmp(action,'movedown_b')
      
      
      if ( move_place(1) )                                    %--Now have the list of junk to send       
+        global pez_has_completed;
+        pez_has_completed=0;
         set(w_main_win,'WindowButtonMotionFcn',['pez_move(''move'',',num2str(move_type),');'] );
         set(w_main_win,'WindowButtonUpFcn', ['pez_move(''finalize'',',num2str(move_type),');']);
      end;          

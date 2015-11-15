@@ -1,7 +1,7 @@
-function pez_config(action,config_file_name)
+function pez_conf(action,config_file_name)
 %
-%  pez_config() :: Configuration window and loader
-%  for PeZ v3.0 last rev June 10,1996  -- No Modifications without author's consent
+%  pez_conf() :: Configuration window and loader
+%  for PeZ v3.1beta last Rev 9/22/97  -- No Modifications without author's consent
 %  (type 'pez' in MATLAB to run)
 %  Craig Ulmer / GRiMACE@ee.gatech.edu
 
@@ -20,12 +20,12 @@ if strcmp(action,'edit_config'),
   if ~exist('w_config') 
     w_config=0; end;  % never opened before, set the win id to something we can't get
   
-  if ~any( get(0,'children') == w_config )
+  if ( isempty(w_config) | ~any( get(0,'children') == w_config ))
         % Open up main control window
         w_config = figure('resize','on','units','pixels','pos',[600 0 400 150],...
                   'numbertitle','off','name','PEZ v3.0 : Edit Configuration');
         
-        pez_config('load_basic');
+        pez_conf('load_basic');
         userdata=get(gcf,'userdata');
         
         frame_color=[.50 .50 .65];
@@ -60,12 +60,12 @@ if strcmp(action,'edit_config'),
         % Gain Entry Box
         pez_precision_ed = uicontrol('style','edit','units','norm','pos', [.37 .20 .09 .12],...
                    'horizontalalignment','left','string', num2str(log10(pez_precision)), ...
-                   'val', log10(pez_precision),'call', 'pez_config(''set_precision'',0); ');
+                   'val', log10(pez_precision),'call', 'pez_conf(''set_precision'',0); ');
           
         % Gain Slider
-        pez_precision_sli = uicontrol('Style','slider','Min',1,'Max',10,'pos',[ .03 .07 .43 .10],...
-                      'val',log10(pez_precision),'units','norm',...
-                      'CallBack','pez_config(''set_precision'',1);' );
+        pez_precision_sli = uicontrol('Style','slider','units','norm','Min',1,'Max',10,'pos',[ .03 .07 .43 .10],...
+                      'val',log10(pez_precision),...
+                      'CallBack','pez_conf(''set_precision'',1);' );
 
 
 
@@ -103,7 +103,7 @@ if strcmp(action,'edit_config'),
 
 
         uicontrol('style','push','units','norm','pos', [ .51 .05 .20 .20],...
-                       'horizontalalignment','center','string','Save','call','pez_config(''save_config'');');
+                       'horizontalalignment','center','string','Save','call','pez_conf(''save_config'');');
 
         uicontrol('style','push','units','norm','pos', [ .74 .05 .20 .20],...
                        'horizontalalignment','center','string','Done','call','delete(gcf);');
@@ -143,7 +143,7 @@ elseif strcmp(action,'load_default'),
 
   if exist('pez_conf.mat')
 
-      pez_config('set_config','pez_conf.mat');
+      pez_conf('set_config','pez_conf.mat');
       
   else
       mirror_x=1;
@@ -156,7 +156,7 @@ elseif strcmp(action,'load_default'),
       pez('new_plot_win');
 
   end,      
-  fr_omega= linspace(-pi,pi,1001);
+  fr_omega= linspace(-pi,pi,1024);
   frs_omega=linspace(-pi,pi,256);
   plot_theta=linspace(0,2*pi,70);
 

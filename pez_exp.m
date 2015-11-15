@@ -1,7 +1,7 @@
 function anz=pez_exp(data_points,occs)
 %
 %  pez_exp() :: Expands set without for loops
-%  for PeZ v3.0 last rev June 10,1996  -- No Modifications without author's consent
+%  for PeZ v3.1beta last Rev 9/22/97  -- No Modifications without author's consent
 %  (type 'pez' in MATLAB to run)
 %  Craig Ulmer / GRiMACE@ee.gatech.edu
 

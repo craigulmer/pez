@@ -91,6 +91,7 @@ O_STR=[' -append   ';
        ' -ocmyk    ';
        ' -psdefcset'];
 
+op_str=[];%grimace..?
 
 if nargin<1,
   action='initialize';
