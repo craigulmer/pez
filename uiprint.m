@@ -26,7 +26,7 @@ function uiprint(action,fignum);
 %  Note to Mathworks:
 %  I have also included in this archive, modified versions of the 
 %  matlab print and printopt commands called PRINT2.M and
-%  PRINTOPT2.M which fix a bug in the print command under Solaris
+%  PRNTOPT2.M which fix a bug in the print command under Solaris
 %  and HP-UX for the HP700, but I think you guys already fixed it
 %  for the HP700.  Basically, I changed the 'lpr -r -Pprinter file'
 %  command to 'lpr -c -dprinter file;rm file'.  You can take that
@@ -38,7 +38,7 @@ function uiprint(action,fignum);
 %
 %       PR_CMD=['print',d_str,op_str,w_type,f_num,fp_str];
 %
-%  within this function.  Then the files printopt2.m and print2.m
+%  within this function.  Then the files prntopt2.m and print2.m
 %  are not required.
 %-------------------------------------------------------------------
 

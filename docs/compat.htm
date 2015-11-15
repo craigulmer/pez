@@ -1,0 +1,160 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.03 [en] (X11; I; HP-UX B.10.20 9000/770) [Netscape]">
+</HEAD>
+<BODY>
+
+<H1>
+PeZ Compatibility Issues</H1>
+Matlab is an interpreted language that runs on several computer platforms.
+While the majority of Matlab core programs work flawlessly across different
+machines, it would be optimistic to hope that a language environment could
+be created that would work 100% of the time for all machine configurations.
+Since graphical functions vary the most from machine os to os, the problem
+becomes even more frustrating for those attempting to create a consistent
+Graphical User Interface on multiple machines.
+
+<P>PeZ attempts to compensate for differences not only between machines,
+but also between different versions of Matlab. Currently there are two
+major revisions of Matlab- v4.2 and v5.x. While Mathworks did a great amount
+of work in v5.0 to stay compatible with v4.2, there are some large changes
+that make this difficult. This page will hopefully help in correcting some
+problems you may experience for your particular system.
+<BR>&nbsp;
+<BR>
+<HR WIDTH="100%">
+<H2>
+Machines Tested on:</H2>
+At one point or another, I can say that we've run Pez on the following
+machines:
+<UL>
+<LI>
+HP-Unix: v4.2/5.0</LI>
+
+<LI>
+PC-Win95: v4.2</LI>
+
+<LI>
+PC-NT: v5.0</LI>
+
+<LI>
+Mac: v4.2/5.0</LI>
+</UL>
+If you have errors or bug reports, <A HREF="mailto:grimace@ee.gatech.edu">please
+let me know</A>.
+
+<P>
+<HR WIDTH="100%">
+<H2>
+Warning Messages (v5.0+)</H2>
+Due to gui changes in Matlab v5.0, Matlab will warn you the first time
+you attempt to use a gui call designed for v4.2. While a great number of
+these warnings have been fixed, there is one particular warning that happens
+every&nbsp; time pez is started in a Matlab shell for the first time. The
+command line will spit out a warning very much like this one:
+<BR>&nbsp;
+<CENTER><TABLE BORDER NOSAVE >
+<TR>
+<TD><TT>>> pez</TT>
+<BR><TT>>>&nbsp;</TT>
+<BR><TT>Warning: Setting marker type based on 'LineStyle' property</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'Marker' and 'LineStyle'
+have been made separate properties</TT>
+<BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Use 'Marker' property
+to remove this warning.</TT>
+<BR><TT>> In /home/users/joe_six_pack/pez_plot.m at line 57</TT>
+<BR><TT>&nbsp; In /home/users/joe_six_pack/pez_bin.m at line 129</TT>
+<BR><TT></TT>&nbsp;</TD>
+</TR>
+</TABLE></CENTER>
+
+
+<P>This is <B>not a problem.</B> This is a simple warning that is necessary
+in order to stay compatible with Matlab v4.2. Again, this warning should
+only pop up once in a new shell.
+
+<P>
+<HR WIDTH="100%">
+<H2>
+Mouse Pointer Residue (Mac)</H2>
+There is a bug with Matlab's <B>ginput()</B> command that will on occasion
+cause old pointer graphics to remain on the screen. Currently there isn't
+much of a fix other than to get an updated copy from Mathworks.
+
+<P>
+<HR WIDTH="100%">
+<H2>
+End-of-Line Termination (Unix vs. Mac vs. PC)</H2>
+The PC, MAC, and Unix text file formats use different termination characters
+for Text files. Therefore, if you are a PC person reading a text file typed
+on a Unix box, chances are you'll see one long stream of characters with
+no carriage returns. This is an age old problem and don't bug me about
+it. Since Unix is the most universal text format, it is the format of choice.
+It <B>SHOULD run FINE </B>on all three platforms since Matlab doesn't care
+too much about white space. If you need to edit the files:
+<BR>&nbsp;
+<UL>
+<LI>
+<B>Unix</B>: No problem, is in the right format. There is a common utility
+called "dos2unix" that can do the translations.</LI>
+
+<LI>
+<B>PC</B>: If you need to convert there are programs out there, but you
+can simply use <B>edit.com </B>to make the change. Edit is a simple do
+editor that comes with windows that is smart enough to make the conversion
+automatically. Load the file, then save it.</LI>
+
+<LI>
+<B>Mac</B>: Not sure, there are supposedly common converters.</LI>
+</UL>
+
+<HR WIDTH="100%">
+<H2>
+Sluggy Updates (Mac)</H2>
+Mac's seem to have a bug in the way that plot updates are done. Since I
+couldn't find a guaranteed fix for this, the Mac version does plain updates
+of all plots. This will be a good deal slower for real-time generation,
+but it seems to work.
+<BR>
+<HR WIDTH="100%">
+<H2>
+Missing Functions</H2>
+Some installations of Matlab may not have all the source files installed.
+While Pez has been written to use as few external functions as possible,
+you may get unusual errors that seem to indicate a function cannot be performed.
+Here are the missing functions I have seen:
+<BR>&nbsp;
+<UL>
+<LI>
+<B>grpdelay.m</B>&nbsp;&nbsp; : You may see some error about frs_omega
+or something. I found this when I did not install all of the signal libraries
+with Matlab v4.2 on a PC. Pez attempts to detect this, but is not 100%
+effective.</LI>
+
+<LI>
+<B>filtdemo.m</B>&nbsp; : This is a m-file that comes with the signal processing
+toolbox. You may not have it installed, Pez should now avoid this missing
+function and just warn you about it.</LI>
+</UL>
+
+
+<P>If you are missing the file, the solution is to just <B>make a dummy
+version</B> of it. For example, if you do not have grpdelay.m (do a <TT>"which
+grpdelay"</TT>), then create the following file called <B>grpdelay.m </B>in
+your current directory:
+<BR>&nbsp;
+<BR>&nbsp;
+<CENTER><TABLE BORDER NOSAVE >
+<TR>
+<TD>function grpdelay&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>&nbsp;</TD>
+</TR>
+</TABLE></CENTER>
+&nbsp;
+<BR>&nbsp;
+<BR>&nbsp;
+<CENTER><FONT SIZE=+2><A HREF="./index.htm">Return to Main</A></FONT></CENTER>
+
+</BODY>
+</HTML>

@@ -1,4 +1,4 @@
-Welcome to PeZ 3.1 for Matlab v4.2 - 5.x, by Craig Ulmer
+Welcome to PeZ 3.1b for Matlab v4.2 - 5.x, by Craig Ulmer
 
 Please read the legal information included in the html documentation found in
 the docs/index.htm file.

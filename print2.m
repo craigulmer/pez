@@ -1,18 +1,18 @@
-function print(arg1,arg2,arg3,arg4,arg5)
-%PRINT  Print graph or save graph to file.
-%       PRINT <filename> saves the current Figure window as PostScript
-%       or a printer specific format, as specified by PRINTOPT. If
+function print2(arg1,arg2,arg3,arg4,arg5)
+%PRINT2  Print graph or save graph to file.
+%       PRINT2 <filename> saves the current Figure window as PostScript
+%       or a printer specific format, as specified by PRNTOPT2. If
 %       a filename is specified, the output is written to the designated file,
 %       overwriting it if it already exists. If the specified filename does not
 %       include an extension, an appropriate one is appended.
 %       If the filename is omitted, the Figure is sent directly to the
-%       printer as specified in PRINTOPT.
+%       printer as specified in PRNTOPT2.
 %
-%       PRINT <filename> -f<figure handle> prints the specified figure.
-%       PRINT <filename> -s<system name> prints the specified SIMULINK
+%       PRINT2 <filename> -f<figure handle> prints the specified figure.
+%       PRINT2 <filename> -s<system name> prints the specified SIMULINK
 %               system.
 %
-%       Syntax: PRINT [ -ddevice] [ -options ] <filename>
+%       Syntax: PRINT2 [ -ddevice] [ -options ] <filename>
 %
 %       Available PostScript devices are:
 %          -dps    - PostScript for black and white printers
@@ -74,10 +74,9 @@ function print(arg1,arg2,arg3,arg4,arg5)
 %          -v       - Verbose mode, bring up the Print dialog box
 %                     which is normally suppressed.
 %
-%       See also PRINTOPT, ORIENT.
+%       See also PRNTOPT2, ORIENT.
 
-%       Modified 23-Nov-93
-%       Copyright (c) 1984-94 by The MathWorks, Inc.
+%       based on print.m from the matlab toolbox
 
 %
 % ---------------------------------------------- User modifiable values.
@@ -334,12 +333,12 @@ if isempty( window )
         error('No Figure to print.');
 end
 
-% If no device given, use default from PRINTOPT
+% If no device given, use default from PRNTOPT2
 if isempty( dev )
 
         % Find device name in list of devices to set the
         % appropriate filename extension.
-        [lprcmd, defaultDevice] = printopt2;
+        [lprcmd, defaultDevice] = prntopt2;
         % skip '-d'
         d = defaultDevice( 3 : size(defaultDevice,2) );
         for devIndex = 1 : size(devices,1)
@@ -350,7 +349,7 @@ if isempty( dev )
 
         end
         if isempty( dev )
-                error(['PRINTOPT specifies an unknown device type '''...
+                error(['PRNTOPT2 specifies an unknown device type '''...
                         defaultDevice ''''])
         end
 end
@@ -647,7 +646,7 @@ if ( devClass == 'GS' )
 end
 
 if (printplot)
-        lprcmd = printopt2;
+        lprcmd = prntopt2;
 
         %if we have a PC...
         if (comp(1:2) == 'PC')

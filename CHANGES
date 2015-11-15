@@ -1,3 +1,12 @@
+Changes in PeZ 3.1b (Nov 10,1997)
+~~~~~~~~~~~~~~~~~~~
+Changes:
+- Fixed compatibility issues with Win95/v4.2.
+   - Would die if no version of filtdemo (changed to eval string)
+   - Found/Fixed side effects of refresh-would erase other windows.
+   - Try detecting lack of grpdelay function. Probably won't work 100% for 4.2
+-Changed some labels to reflect clearer use.
+
 Changes in PeZ 3.1 (Sep 29,1997)
 ~~~~~~~~~~~~~~~~~~
 Changes:

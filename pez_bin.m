@@ -1,7 +1,7 @@
 function pez_bin(action,p_val)
 %
 %  pez_bin() :: Bulk of decode action routines. Zscale, Add Mirrors,etc
-%  for PeZ v3.1beta last Rev 9/22/97  -- No Modifications without author's consent
+%  for PeZ v3.1b last Rev 11/10/97  -- No Modifications without author's consent
 %  (type 'pez' in MATLAB to run)
 %  Craig Ulmer / GRiMACE@ee.gatech.edu
 
@@ -11,6 +11,8 @@ global weight ed_weight sli_weight pez_new_point mirror_x mirror_y del_place del
 global pez_precision dp move_x_val move_y_val move_type move_numh move_place move_handle move_num_handle drag_move 
 global ed_real ed_imag ed_mag ed_angle edit_type fr_omega id_plot pez_fuz 
 global ui_text_line1 ui_text_line2 ui_text_line3 ui_text_line4 ed_change pez_gain pez_gain_ed pez_gain_sli pez_angle_type
+
+global pez_redraw_kludge;
 
 if nargin<1,
      action='new';
@@ -78,7 +80,6 @@ elseif strcmp(action,'rgain')
        set(pez_gain_sli,'val',pez_gain);
        pez_plot(0);
 
-
 % ===================================
 %  Handle the Figure Mirrors for Poles or 'addmirrorp' call
 elseif strcmp(action,'addmirrorp')
@@ -109,7 +110,8 @@ elseif strcmp(action,'addmirrorp')
         pez_new_point= -pez_new_point;
     end;  
 
-    refresh; %Otherwise ginput doesn't get cursor  
+    eval(pez_redraw_kludge);
+    %refresh; %Otherwise ginput doesn't get cursor  
  
 % ===================================
 %  Handle the ADD Single POLE or 'addsp' call
@@ -194,8 +196,9 @@ elseif strcmp(action,'addmirrorz')
            pez_add(pez_new_point,0,weight);
            pez_new_point= -pez_new_point;
     end; 
-  
-    refresh; %Otherwise ginput doesn't get cursor  
+
+    eval(pez_redraw_kludge);
+    %refresh; %Otherwise ginput doesn't get cursor  
     
 % ===================================
 %  Handle the ADD Single ZERO or 'addsz' call
@@ -363,8 +366,9 @@ elseif strcmp(action,'delexecute')
           end;
     end;      
  end;
-  
-  refresh; %Otherwise ginput doesn't get cursor  
+
+  eval(pez_redraw_kludge);
+  %refresh; %Otherwise ginput doesn't get cursor  
   pez_plot(0);
 
 % ===================================
@@ -663,7 +667,9 @@ elseif strcmp(action,'edit_final')
     pez_plot(0);
     
     axes(axes_zplane);
-    refresh;
+    eval(pez_redraw_kludge);
+    rdraw;
+    %refresh;
     
         
 % ===================================
