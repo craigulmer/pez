@@ -1,4 +1,10 @@
 function hh = pez_freq(b,a,n,dum,Fs)
+%
+%  pez_freq() :: Calculates most of the freq response(not things at origin)
+%  for PeZ v2.8b last Rev Feb 25  -- No Modifications without author's consent
+%  (type 'pez' in MATLAB to run)
+%  Craig Ulmer / GRiMACE@ee.gatech.edu
+
 a = a(:).';
 b = b(:).';
 na = max(size(a));

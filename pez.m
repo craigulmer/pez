@@ -1,17 +1,20 @@
 function pez(action,p_val)
-% Pez: A Pole Zero Editor  -- GUI for Matlab
-% -- Craig Ulmer / gt7667a@prism.gatech.edu / gt7667a@eecom.gaetch.edu / ulmer@eedsp.gatech.edu
-% -- No Modifications or Charging for Money without the Author's Consent
+%PeZ v2.8: A Pole-Zero Editor for MATLABby Craig Ulmer / GRiMACE@ee.gatech.edu
+%No Modifications without the author's consent. See documentation for Legals.
+%
+%  See online help at:  http://www.ece.gatech.edu/users/grimace/pez/index.html
+%
+%Short: PeZ allows a user to graphically edit the poles and zeros for a
+%filter in the complex Z-Plane. To run, boot up MATLAB and type  pez.
 
 global ed_scale sli_scale p_list z_list num_poles num_zeros z_axis w_main_win axes_zplane place num_diff_poles num_diff_zeros
 global weight ed_weight sli_weight new mirror_x mirror_y del_weight del_values pz precision ed_real ed_imag ed_mag ed_angle
 global fr_omega id_plot ui_text_line1 ui_text_line2 ui_text_line3 ui_text_line4 pez_fuz ed_change plot_ax
+global pez_gain
 
 if nargin<1,
      action='new';
 end;     
-
-
 
 % ================================
 %  Handle the NEW event
@@ -24,6 +27,8 @@ if strcmp(action,'new'),
  
   p_list=[];
   z_list=[];
+  pez_gain=1;
+  
   num_poles=0;
   num_diff_poles=0;
   num_zeros=0;
@@ -42,7 +47,7 @@ if strcmp(action,'new'),
   w_main_win=figure('resize','on','units','pixels',...
                   'Pointer','watch',... 
                   'pos',[400 0 800 465],...
-                  'numbertitle','off','name','PEZ v2.7 : Pole-Zero Control Window',...
+                  'numbertitle','off','name','PEZ v2.8 : Pole-Zero Control Window',...
                   'visible','off');
   
   pez('new_plot_win');
@@ -92,7 +97,7 @@ if strcmp(action,'new'),
                                    
                      
   % Set up the Z-Plane plot Axes
-  axes_zplane=axes('aspectRatio',[1,1],'units','norm','pos',[.06 .198 .38 .67]);
+  axes_zplane=axes('aspectRatio',[1,1],'units','norm','pos',[.06 .198 .38 .67],'drawmode','fast');
   
   axis(axis);
   set(gca,'box','on');
@@ -613,6 +618,13 @@ elseif strcmp(action,'new_plot_win')
                              'elseif argv==5, pez(''hide_me'');end;']);
 
 
+   uicontrol('style','checkbox','units','norm','back',[.5 .5 .8],'fore',[1 1 1],...
+                  'Pos',[ 0.70 0.925 0.28 0.06],... 
+                  'string','Mag in dB',...
+                  'val',0,...
+                  'call','global pez_log;pez_log=get(gco,''val'');pez_plot(0);');
+
+
    plot_ax(1)=axes('box','on','units','norm','pos',[0.07 0.54 0.35 0.3255]);
    set(plot_ax(1),'fontsize',9);
     title('Z-Plane');
@@ -628,6 +640,7 @@ elseif strcmp(action,'new_plot_win')
     set(plot_ax(3),'fontsize',9);
     title('Magnitude of Frequency Response');
     xlabel('omega/pi');ylabel('amplitude');
+    grid on;
     hold on;
 
    plot_ax(4)=axes('box','on','units','norm','pos',[0.62 0.08 0.35 0.3255]);
@@ -703,7 +716,7 @@ elseif  strcmp(action,'hide_me')
 %---------
 elseif  strcmp(action,'restore_text')
 
- set(ui_text_line1,'horizontalalignment','center','string','Welcome to PEZ 2.7: The Pole Zero Editor');
+ set(ui_text_line1,'horizontalalignment','center','string','Welcome to PEZ 2.8: The Pole Zero Editor');
  set(ui_text_line2,'horizontalalignment','center','string','EE 2200');
  set(ui_text_line3,'horizontalalignment','center','string','Georgia Institute of Technology');
  set(ui_text_line4,'horizontalalignment','center','string','Comments: Grimace@ee.gatech.edu');

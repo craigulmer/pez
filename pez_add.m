@@ -1,9 +1,12 @@
 function pez_add(new,is_a_pole)
-% ===================================
-%  Handle the ADD a POLE or 'addp' call
-%elseif strcmp(action,'addp')
+%
+%  pez_add(cartesian,is_a_pole) :: Root routine for pole or zero add
+%  for PeZ v2.8b last Rev Feb 25  -- No Modifications without author's consent
+%  (type 'pez' in MATLAB to run)
+%  Craig Ulmer / GRiMACE@ee.gatech.edu
 
    global place weight precision pez_fuz axes_zplane p_list z_list num_poles num_zeros num_diff_poles num_diff_zeros
+   global axes_zplane
  
    if is_a_pole
       a_list=p_list;
@@ -21,22 +24,23 @@ function pez_add(new,is_a_pole)
       num_diff_b=num_diff_poles;
    end;   
       
-
+         axes(axes_zplane);
+         
          place=0;
           
-         if num_a   
-           place=pez_is_hit(new(1,1),new(1,2),a_list(:,1),a_list(:,2),precision);
+         if (num_a)   
+           place=pez_is_hit(new(1),new(2),a_list(:,1),a_list(:,2),precision);
          end;   
          
          t_weight=weight;
-         num_a=num_a+t_weight;  % -- add weight
+         num_a=num_a+t_weight;  % -- add weight 
          
-         if num_b
-           warn=pez_is_hit(new(1,1),new(1,2),b_list(:,1),b_list(:,2),precision);
+         if ((num_b)&(~place))
+           warn=pez_is_hit(new(1),new(2),b_list(:,1),b_list(:,2),precision);
            if (warn~=0)
                 % -- There is already a ZERO here, we have a CONTEST
                 % -- We know that there could not be a POLE here
-                if b_list(warn,4) <= t_weight
+                if (b_list(warn,4) <= t_weight)
                          % -- we know there were multi zeros, but fewer than new additions
                          t_weight=t_weight-b_list(warn,4);
                          num_a=num_a-b_list(warn,4);
@@ -49,7 +53,7 @@ function pez_add(new,is_a_pole)
                          
                          delete(b_list(warn,3));
                          
-                         if warn~=num_diff_b
+                         if (warn~=num_diff_b)
                              b_list(warn:num_diff_b-1,:)=b_list(warn+1:num_diff_b,:);
                          end;
                          
@@ -86,12 +90,12 @@ function pez_add(new,is_a_pole)
               num_diff_a=num_diff_a+1;
               place=num_diff_a;
               axes(axes_zplane);
-              a_list(place,1)=new(1,1);
-              a_list(place,2)=new(1,2);
-              if is_a_pole
-                  a_list(place,3)=plot(new(1,1),new(1,2),'x');
+              a_list(place,1)=new(1);
+              a_list(place,2)=new(2);
+              if (is_a_pole)
+                  a_list(place,3)=plot(new(1,1),new(1,2),'x','erasemode','background');
               else
-                  a_list(place,3)=plot(new(1,1),new(1,2),'o');
+                  a_list(place,3)=plot(new(1,1),new(1,2),'o','erasemode','background');
               end;    
               a_list(place,4)=1;
               a_list(place,5)=0;
